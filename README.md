@@ -45,3 +45,12 @@ assets/shared.js        demo databáza a pomocné funkcie
 assets/admin.js         logika adminu
 netlify.toml            Netlify konfigurácia
 ```
+
+
+## Aktualizácia – vozidlá a zákazky
+- Dashboard: 5 stavov a celkový počet áut v areáli.
+- Vozidlá v areáli: samostatný zoznam, počítanie dní od prijatia a od dokončenia opravy (kalendárne dni vrátane prvého dňa).
+- Zákazky: fulltext podľa čísla, zákazníka/firmy, ŠPZ, auta, stručného popisu; filter podľa prác a stavu.
+- Stručný popis opravy: automatický návrh podľa popisu, dielov a obhliadky, potvrdenie/upravenie technikom.
+- Prítomnosť je evidovaná bez konkrétneho miesta parkovania.
+- DEMO používa localStorage jedného prehliadača; nejde o produkčnú databázu.
