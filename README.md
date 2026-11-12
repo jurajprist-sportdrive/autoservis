@@ -84,3 +84,10 @@ Samostatná záložka História zákaziek podporuje import JSON/CSV, vyhľadáva
 Nová zákazka: pridanie zákazníka/vozidla, vyhľadávanie, väzba majiteľa, povinné km, otvorenie detailu. Poradie kariet: Prehľad, Obhliadka, CP, Zákazka, Potrebujem diel, História, Ukončiť. Dva PDF zákazkové listy (technik/zákazník), tlač CP, samostatná editácia položiek zákazky, odporúčania, fotografie a dokumenty, tabuľka obhliadok, ekonomický súhrn.
 
 **DÔLEŽITÉ:** Prototype používa localStorage, nie databázu. PDF tlač cez dialóg prehliadača. Firemné údaje dodávateľa je nutné doplniť pred reálnou tlačou. Nejde o produkčne zabezpečený systém.
+
+
+## Oprava 12.11.2026
+- Opravená chýbajúca funkcia openJob a riadenie kariet detailu zákazky.
+- Otestované otvorenie zákazky, obhliadky/CP, zákazkového listu, editácie zákazníka a vozidla na úrovni JS volaní.
+- V cenových ponukách pridané tlačidlo Nová cenová ponuka pre existujúcu zákazku. Samostatná CP bez zákazky ešte nie je implementovaná.
+- Testovacie údaje sa ukladajú do localStorage. Pred nahratím odporúčame zálohu dát v prehliadači.
