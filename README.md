@@ -79,3 +79,8 @@ Samostatná záložka História zákaziek podporuje import JSON/CSV, vyhľadáva
 - Nové požiadavky na diely označené červeným výkričníkom.
 - Fotografie zákazky sú lokálne demo úložisko s obmedzením veľkosti.
 - Upozornenie: demo v localStorage, nie ostrý backend. Daňové výpočty, migrácia historických dát a spracovanie súborov vyžadujú pred produkciou kontrolu.
+
+## Aktualizácia: pracovný proces zákazky (12.11.2026)
+Nová zákazka: pridanie zákazníka/vozidla, vyhľadávanie, väzba majiteľa, povinné km, otvorenie detailu. Poradie kariet: Prehľad, Obhliadka, CP, Zákazka, Potrebujem diel, História, Ukončiť. Dva PDF zákazkové listy (technik/zákazník), tlač CP, samostatná editácia položiek zákazky, odporúčania, fotografie a dokumenty, tabuľka obhliadok, ekonomický súhrn.
+
+**DÔLEŽITÉ:** Prototype používa localStorage, nie databázu. PDF tlač cez dialóg prehliadača. Firemné údaje dodávateľa je nutné doplniť pred reálnou tlačou. Nejde o produkčne zabezpečený systém.
