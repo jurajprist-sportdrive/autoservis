@@ -91,3 +91,12 @@ Nová zákazka: pridanie zákazníka/vozidla, vyhľadávanie, väzba majiteľa, 
 - Otestované otvorenie zákazky, obhliadky/CP, zákazkového listu, editácie zákazníka a vozidla na úrovni JS volaní.
 - V cenových ponukách pridané tlačidlo Nová cenová ponuka pre existujúcu zákazku. Samostatná CP bez zákazky ešte nie je implementovaná.
 - Testovacie údaje sa ukladajú do localStorage. Pred nahratím odporúčame zálohu dát v prehliadači.
+
+
+## Aktualizácia 12. 11. 2026 – nákupné ceny a finančný súhrn
+- V CP aj v zákazke sa pri dieloch zadáva nákupná jednotková cena bez DPH.
+- V tabuľkách je nákupná cena označená ako interná; zákaznícke PDF ju neobsahuje.
+- Finančný súhrn v karte Zákazka: firma používa nákup a predaj materiálu bez DPH, FO používa nákup a predaj materiálu s DPH; práca je v oboch prípadoch v zadanej cene bez DPH.
+- Rozdiel = práca + materiál predaj – materiál nákup. Je to manažérsky rozdiel pred ďalšími nákladmi.
+- Zmena typu zákazky automaticky prepočíta súhrn. Daňový doklad musí nezávisle dodržať platné pravidlá DPH.
+- Ide o lokálny prototyp s localStorage, nie o produkčný viacpoužívateľský backend.
