@@ -93,10 +93,15 @@ Nová zákazka: pridanie zákazníka/vozidla, vyhľadávanie, väzba majiteľa, 
 - Testovacie údaje sa ukladajú do localStorage. Pred nahratím odporúčame zálohu dát v prehliadači.
 
 
-## Aktualizácia 12. 11. 2026 – nákupné ceny a finančný súhrn
-- V CP aj v zákazke sa pri dieloch zadáva nákupná jednotková cena bez DPH.
-- V tabuľkách je nákupná cena označená ako interná; zákaznícke PDF ju neobsahuje.
-- Finančný súhrn v karte Zákazka: firma používa nákup a predaj materiálu bez DPH, FO používa nákup a predaj materiálu s DPH; práca je v oboch prípadoch v zadanej cene bez DPH.
-- Rozdiel = práca + materiál predaj – materiál nákup. Je to manažérsky rozdiel pred ďalšími nákladmi.
-- Zmena typu zákazky automaticky prepočíta súhrn. Daňový doklad musí nezávisle dodržať platné pravidlá DPH.
-- Ide o lokálny prototyp s localStorage, nie o produkčný viacpoužívateľský backend.
+## Aktualizácia 12.11.2026 – Kasa a materiál mimo servisu
+- Nová položka Kasa hneď pod Dashboardom, jeden spoločný zostatok.
+- Rýchle pohyby: dátum, predvolené SZ, H, vklad/výber, popis a kladná suma.
+- Filtre H/K, typ pohybu, vyrovnania a zmenené záznamy.
+- Vyrovnanie fyzického stavu kasy s povinným dôvodom a červeným označením.
+- História vytvorenia, úpravy a storna pohybov; pri úprave prepočet zostatkov.
+- Nastavenia: editovateľné osoby pokladne.
+- Dashboard: jeden široký panel STAV KASY.
+- Materiál a náklady mimo servisu: evidencia dátumu, dodávateľa, položky, ceny, DPH a kategórie.
+- Ekonomika: samostatné mesačné náklady mimo servisu sa zohľadňujú v orientačnom výsledku.
+
+**DÔLEŽITÉ:** Toto je statické DEMO s localStorage. História nie je zabezpečená proti manipulácii, skutočnú identitu editora nemožno overiť a údaje sa medzi počítačmi nesynchronizujú. Na ostrú prevádzku treba serverovú databázu, prihlásenie, audit a zálohy. Pokladňa nie je náhradou zákonnej účtovnej evidencie.
