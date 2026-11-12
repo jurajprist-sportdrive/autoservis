@@ -66,3 +66,16 @@ Samostatná záložka História zákaziek podporuje import JSON/CSV, vyhľadáva
 - Kliknutie na riadok otvorí existujúci detail zákazky.
 - Zákazníci a vozidlá: klikateľné riadky a editovateľné modálne formuláre vrátane platností vozidla.
 - Toto je stále prototyp s lokálnym úložiskom prehliadača; automatické e-maily vyžadujú backend.
+
+
+## Nová aktualizácia
+- Zákazník FO: meno, adresa, telefón, e-mail. Firma: navyše IČO, DIČ, IČ DPH, zodpovedná osoba.
+- Vozidlo: majiteľ z databázy, ŠPZ, značka/model, VIN, km, výkon kW, rok výroby, objem motora a platnosti.
+- Zákazky: detail má karty Prehľad, Zákazka, Obhliadka, CP a diely, Potrebujem diel, História, Ukončiť zákazku.
+- Cenová ponuka: samostatné riadky dielov a práce, každá položka Upraviť / Potvrdiť / Zrušiť, hromadné Potvrdiť všetko.
+- Potvrdené položky sa synchronizujú do zákazkového listu; súhrn cien bez DPH a s DPH.
+- Cenové ponuky sa otvárajú samostatne bez ostatných kariet zákazky.
+- Ukončenie zákazky: faktúra (číslo) alebo hotovosť, oddelené potvrdenie odovzdania auta.
+- Nové požiadavky na diely označené červeným výkričníkom.
+- Fotografie zákazky sú lokálne demo úložisko s obmedzením veľkosti.
+- Upozornenie: demo v localStorage, nie ostrý backend. Daňové výpočty, migrácia historických dát a spracovanie súborov vyžadujú pred produkciou kontrolu.
