@@ -54,3 +54,16 @@ netlify.toml            Netlify konfigurácia
 - Stručný popis opravy: automatický návrh podľa popisu, dielov a obhliadky, potvrdenie/upravenie technikom.
 - Prítomnosť je evidovaná bez konkrétneho miesta parkovania.
 - DEMO používa localStorage jedného prehliadača; nejde o produkčnú databázu.
+
+
+## História zákaziek
+Samostatná záložka História zákaziek podporuje import JSON/CSV, vyhľadávanie, detail pôvodného záznamu a editovateľný stručný popis. Pôvodné zákazky z Provax nie sú súčasťou ZIP: na ich získanie treba samostatný export z prihlásenej aplikácie. Údaje sa ukladajú iba do localStorage daného prehliadača. Nezadávajte prihlasovacie heslo do statického webu.
+
+## Aktualizácia: STK, EK, diaľničná známka, PZP
+- Pri vytváraní vozidla možno vyplniť štyri dátumy platnosti.
+- Pri existujúcom vozidle tlačidlo „STK / EK / známka / PZP“ umožní dátumy upraviť.
+- Záložka „Končiace platnosti“ obsahuje prehľad, filtre, počítadlá a návrh e-mailu cez mailto.
+- Plán upozornení: STK/EK/PZP 30 a 7 dní, diaľničná známka 14 a 3 dni pred koncom.
+- POZOR: Automatické e-maily nie sú aktívne. Na automatické odosielanie treba backend, plánovanú úlohu, SMTP, súhlasy a log odoslania. Tlačidlo e-mail iba otvorí poštový program.
+- SMS nie sú súčasťou tejto verzie.
+- Dáta zostávajú v localStorage existujúceho prehliadača, bez resetu.
