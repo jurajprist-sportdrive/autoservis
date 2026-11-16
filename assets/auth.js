@@ -1,0 +1,41 @@
+/* AUTOSERVIS TOMI: API authentication gate. Business data remains local demo until migrated. */
+(() => {
+  'use strict';
+  const API='https://api.autoservistomi.sk/index.php';
+  let token=sessionStorage.getItem('tomi_api_token')||'';
+  const root=document.getElementById('authGate');
+  const app=document.querySelector('.admin');
+  function showLogin(message=''){
+    app.hidden=true;root.hidden=false;
+    root.innerHTML=`<div class="auth-panel"><h1>AUTOSERVIS TOMI</h1><p>Prihlásenie do interného systému</p><form id="authForm"><label for="authUser">Používateľské meno</label><input id="authUser" autocomplete="username" required maxlength="100"><label for="authPass">Heslo</label><input id="authPass" type="password" autocomplete="current-password" required><p id="authError" role="alert">${message.replace(/[&<>"']/g,'')}</p><button class="btn" type="submit">Prihlásiť sa</button></form></div>`;
+    document.getElementById('authForm').addEventListener('submit',async e=>{
+      e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;
+      try{
+        const result=await request('login','POST',{username:document.getElementById('authUser').value,password:document.getElementById('authPass').value},false);
+        if(!result.token||!result.user)throw Error('Neplatná odpoveď servera');
+        token=result.token;sessionStorage.setItem('tomi_api_token',token);start(result.user);
+      }catch(err){document.getElementById('authError').textContent=err.message||'Prihlásenie zlyhalo';btn.disabled=false;}
+    });
+  }
+  async function request(action,method='GET',body,authenticated=true){
+    const headers={'Accept':'application/json'};
+    if(body!==undefined)headers['Content-Type']='application/json';
+    if(authenticated&&token)headers.Authorization='Bearer '+token;
+    const res=await fetch(API+'?action='+encodeURIComponent(action),{method,headers,body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'});
+    let data;try{data=await res.json()}catch{throw Error('API nevrátilo platnú JSON odpoveď');}
+    if(!res.ok)throw Error(data.error||'Chyba servera ('+res.status+')');
+    return data;
+  }
+  function start(user){
+    root.hidden=true;app.hidden=false;
+    sessionStorage.setItem('tomi_role',user.role);
+    window.TomiAuth={user,request,logout:async()=>{try{await request('logout','POST',{});}catch{}token='';sessionStorage.removeItem('tomi_api_token');location.hash='dashboard';location.reload();}};
+    const bar=document.querySelector('.topbar .row:last-child');
+    if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
+    const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='TESTOVACÍ REŽIM: Prihlásenie je overené serverom, ale zákazky a ostatné údaje sa zatiaľ ukladajú iba v tomto prehliadači. Nezadávajte reálne údaje zákazníkov.';
+    document.querySelector('.workspace').prepend(warning);
+    const script=document.createElement('script');script.src='/assets/admin.js?v=20261116-auth-v1';document.body.append(script);
+  }
+  async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}
+  init();
+})();
