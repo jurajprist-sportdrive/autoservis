@@ -73,3 +73,12 @@
 
 /* Payment remains a native selectable field, without the decorative arrow */
 .tomi-payment-select{appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;background-image:none!important;padding-right:12px!important;cursor:pointer!important}
+
+/* Kompaktný stavový panel */
+.tomi-job-controls{grid-template-columns:minmax(150px,1fr) minmax(150px,1fr) minmax(210px,1.35fr)!important}
+.tomi-job-controls .tomi-compact-select,.tomi-job-controls .tomi-payment-select{appearance:none;-webkit-appearance:none;background-image:none!important;cursor:pointer}
+.tomi-compact-select.is-complete,.tomi-invoice-input.is-complete{background:#dcfce7!important;color:#166534!important;border:2px solid #22c55e!important}
+.tomi-compact-select.is-incomplete,.tomi-invoice-input.is-incomplete{background:#fee2e2!important;color:#991b1b!important;border:2px solid #ef4444!important}
+.tomi-job-summary .row{display:flex;align-items:center}.tomi-job-summary .row>span{flex:1;min-width:110px}
+.tomi-job-summary .tomi-job-extra{flex:0 0 auto}.tomi-back-square{border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc;color:#172554;font-size:25px;width:45px;height:45px;cursor:pointer;flex:0 0 45px}
+@media(max-width:700px){.tomi-job-controls{grid-template-columns:1fr!important}.tomi-job-summary .row>span{flex:1 1 125px}}
