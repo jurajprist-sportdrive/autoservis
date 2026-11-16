@@ -9,3 +9,9 @@ Rozšírenie existujúceho statického admin panelu. Otvorte /admin/ na webhosti
 - Úpravy položiek v editore dokumentov sa ukladajú v `documents` pri zákazke; zatiaľ neprepíšu automaticky pôvodné cenové položky zákazky ani výpočty Ekonomiky. Tie zostávajú v existujúcej logike.
 - Hlasový vstup zatiaľ nie je implementovaný.
 - Pred nahratím zálohujte aktuálne dáta; localStorage sa viaže na konkrétnu doménu a prehliadač.
+
+## Úprava 16.11. – ceny a farebná tlač
+- Typ zákazníka sa pre cenovú ponuku a zákaznícky zákazkový list automaticky berie z karty zákazníka (FO/Firma). Nepridáva sa ďalší prepínač.
+- FO: v editore aj v tlači je len jeden stĺpec „Cena“; Firma: „Cena bez DPH“ a „Cena s DPH“.
+- Farebná tlač/PDF má logo AUTOSERVIS TOMI vľavo a údaje AC7-SK, s.r.o. vpravo, rovnako na všetkých dokumentoch; tlačové farby sú explicitne nastavené. V dialógu tlače môže byť nutné zapnúť „Grafika na pozadí“.
+- Existujúce ekonomické výpočty nie sú týmto vydaním zmenené; integrácia editora do ekonomiky zostáva otvorená.
