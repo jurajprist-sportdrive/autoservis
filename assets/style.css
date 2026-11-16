@@ -104,3 +104,7 @@
 .navlink.tomi-parts-pending .tomi-parts-marker{background:#dc2626;color:white}
 @keyframes tomiPartsPulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(220,38,38,.3)}50%{box-shadow:inset 0 0 0 2px rgba(220,38,38,.9),0 0 12px rgba(220,38,38,.5)}}
 @media(prefers-reduced-motion:reduce){.navlink.tomi-parts-pending{animation:none}}
+
+/* Čistý číselný indikátor bez malého trojuholníka napravo */
+.navlink[data-page="parts"] .tomi-parts-marker{clip-path:none!important;border-radius:8px!important;padding:0 8px!important;min-width:27px!important;height:27px!important}
+.navlink[data-page="parts"] .request-alert{display:none!important}
