@@ -82,3 +82,25 @@
 .tomi-job-summary .row{display:flex;align-items:center}.tomi-job-summary .row>span{flex:1;min-width:110px}
 .tomi-job-summary .tomi-job-extra{flex:0 0 auto}.tomi-back-square{border:1px solid #cbd5e1;border-radius:9px;background:#f8fafc;color:#172554;font-size:25px;width:45px;height:45px;cursor:pointer;flex:0 0 45px}
 @media(max-width:700px){.tomi-job-controls{grid-template-columns:1fr!important}.tomi-job-summary .row>span{flex:1 1 125px}}
+
+/* Jediný horizontálny riadok detailu zákazky na veľkej obrazovke */
+.tomi-job-top{display:grid!important;grid-template-columns:minmax(190px,1.25fr) minmax(170px,1.2fr) minmax(150px,1fr) minmax(125px,.9fr) minmax(115px,.8fr) minmax(195px,1.25fr)!important;align-items:center!important;gap:12px!important}
+.tomi-job-ident{min-width:0}.tomi-job-ident h2{font-size:25px!important}.tomi-job-plate{font-size:20px!important}
+.tomi-job-status,.tomi-job-controls{display:contents!important}
+.tomi-job-status>div,.tomi-job-controls>div{min-width:0!important;width:100%!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;text-align:left!important;gap:4px!important}
+.tomi-job-status .tomi-status-select{min-height:45px!important;font-size:14px!important;padding:7px!important}
+.tomi-job-controls .tomi-compact-select,.tomi-job-controls .tomi-payment-select{width:100%!important;max-width:none!important;min-width:0!important;min-height:45px!important}
+.tomi-job-controls .row{width:100%;display:flex!important;gap:4px!important}
+.tomi-job-controls .tomi-invoice-input{min-width:0!important;max-width:none!important;flex:1;width:75px!important}
+.tomi-job-controls .row .btn{padding:7px!important;font-size:11px!important}
+@media(max-width:1250px){.tomi-job-top{grid-template-columns:repeat(3,minmax(0,1fr))!important}.tomi-job-ident{grid-column:1/-1}}
+@media(max-width:680px){.tomi-job-top{grid-template-columns:repeat(2,minmax(0,1fr))!important}.tomi-job-ident{grid-column:1/-1}}
+@media(max-width:390px){.tomi-job-top{grid-template-columns:minmax(0,1fr)!important}}
+/* Požiadavky: zelená 0 / červená s pulzovaním */
+.navlink[data-page="parts"]{position:relative;display:flex;align-items:center;gap:7px}
+.tomi-parts-marker{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;min-width:32px;height:30px;font-size:13px;font-weight:900;clip-path:polygon(50% 0%,100% 100%,0% 100%);padding-top:7px;background:#16a34a;color:white}
+.navlink.tomi-parts-clear{background:rgba(22,163,74,.12)!important;color:#16a34a!important}
+.navlink.tomi-parts-pending{background:rgba(220,38,38,.18)!important;color:#ef4444!important;animation:tomiPartsPulse 1.4s ease-in-out infinite}
+.navlink.tomi-parts-pending .tomi-parts-marker{background:#dc2626;color:white}
+@keyframes tomiPartsPulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(220,38,38,.3)}50%{box-shadow:inset 0 0 0 2px rgba(220,38,38,.9),0 0 12px rgba(220,38,38,.5)}}
+@media(prefers-reduced-motion:reduce){.navlink.tomi-parts-pending{animation:none}}
