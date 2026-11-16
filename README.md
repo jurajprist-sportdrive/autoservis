@@ -28,3 +28,11 @@ Rozšírenie existujúceho statického admin panelu. Otvorte /admin/ na webhosti
 ### Aktualizácia upozornení a prác naviac
 - Požiadavky na diely: 0 = zelený panel a 0 v trojuholníku; >0 = výrazne pulzujúci červený panel a počet v trojuholníku. Bez duplicitného počítadla.
 - Práce naviac: zelené tlačidlo, samostatný PDF protokol, položky sa prenesú do zákazky až po potvrdení schválenia; verzovanie zostáva zachované.
+
+## Aktualizácia: kompaktný detail zákazky
+- Odstránené duplicitné horné tlačidlá protokolov a štyri spodné informačné karty.
+- Zákazník menším písmom, výrazné vozidlo a EČV; oddelený stav zákazky a vozidla.
+- Jeden riadok pre mechanika, úhradu, editovateľné číslo faktúry a zelené tlačidlo Práce naviac.
+- Jediná kompaktná lišta dokumentov rozložená na celú šírku.
+- Zachované ostatné funkcie vrátane histórie a prehľadu prác naviac.
+- Údaje sú stále iba v localStorage; pred nahratím odporúčame zálohu a test na testovacom webe.
