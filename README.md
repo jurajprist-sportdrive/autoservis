@@ -15,3 +15,11 @@ Rozšírenie existujúceho statického admin panelu. Otvorte /admin/ na webhosti
 - FO: v editore aj v tlači je len jeden stĺpec „Cena“; Firma: „Cena bez DPH“ a „Cena s DPH“.
 - Farebná tlač/PDF má logo AUTOSERVIS TOMI vľavo a údaje AC7-SK, s.r.o. vpravo, rovnako na všetkých dokumentoch; tlačové farby sú explicitne nastavené. V dialógu tlače môže byť nutné zapnúť „Grafika na pozadí“.
 - Existujúce ekonomické výpočty nie sú týmto vydaním zmenené; integrácia editora do ekonomiky zostáva otvorená.
+
+
+## Aktualizácia – práce naviac a upozornenia na diely
+- Výrazné tlačidlo PRÁCE NAVIAC v detaile zákazky, editovateľný návrh, položky, zdôvodnenie, PDF a schvaľovanie.
+- Pri schválení sa doplnia položky do zákazníckeho dokumentu a pracovného listu, vytvoria sa nemenné snímky verzií zákazkového listu Z... / Z...-1 / Z...-2.
+- Zákazník, vozidlo, stav zákazky a stav vozidla oddelene.
+- Požiadavky na diely navrchu menu, pri nových požiadavkách červený pulzujúci výstražný panel.
+- Demo používa localStorage. Pred nasadením zálohujte údaje. Schválenie je ručné označenie, nie elektronický súhlas zákazníka.
