@@ -25,3 +25,17 @@
 .tomi-extra-row{display:grid;grid-template-columns:minmax(180px,2fr) 110px 115px 46px;gap:8px;margin:8px 0;align-items:center}
 .tomi-extra-row input{width:100%;min-width:0}
 @media(max-width:700px){.tomi-extra-row{grid-template-columns:1fr 1fr}.tomi-extra-row input:first-child{grid-column:1/-1}}
+
+/* 2026-11-16: single consistent parts alert, count inside triangle */
+.tomi-parts-priority{display:flex!important;align-items:center!important;gap:9px!important;justify-content:flex-start!important;min-height:74px!important;transition:background-color .2s ease,color .2s ease!important}
+.tomi-parts-priority .navicon{flex:0 0 auto!important}
+.tomi-warning-triangle{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 54px!important;width:54px!important;height:51px!important;margin-left:auto!important;background:#fde047!important;clip-path:polygon(50% 0%,100% 95%,0 95%)!important;color:#172033!important;filter:drop-shadow(0 1px 1px #333)!important}
+.tomi-warning-triangle #tomi-parts-count{display:block!important;margin-top:15px!important;font-size:23px!important;font-weight:900!important;line-height:1!important;color:#172033!important;font-variant-numeric:tabular-nums!important}
+.tomi-parts-priority.tomi-urgent .tomi-warning-triangle #tomi-parts-count{color:#172033!important}
+.tomi-parts-priority.tomi-clear{background:#15803d!important;color:#fff!important;border:2px solid #4ade80!important;box-shadow:0 0 0 1px rgba(74,222,128,.3)!important;animation:none!important}
+.tomi-parts-priority.tomi-clear .navicon{color:#fff!important}
+.tomi-parts-priority.tomi-urgent{animation:tomi-alert-strong .8s ease-in-out infinite!important}
+@keyframes tomi-alert-strong{0%,100%{background:#991b1b;box-shadow:0 0 0 2px #fecaca,0 0 13px rgba(220,38,38,.4)}50%{background:#ef4444;box-shadow:0 0 0 5px #fca5a5,0 0 36px rgba(239,68,68,.95)}}
+@media (prefers-reduced-motion:reduce){.tomi-parts-priority.tomi-urgent{animation:none!important}}
+.tomi-extra-main{background:#15803d!important;border-color:#166534!important;color:#fff!important}
+.tomi-extra-main:hover{background:#166534!important}
