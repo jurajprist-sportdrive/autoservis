@@ -3,13 +3,3 @@
 
 /* Kasa: filtre priamo pod hlavičkou stĺpcov */
 .cash-table{min-width:1080px}.cash-table .cash-filter-row th{vertical-align:top;background:var(--surface,#f5f7fb);padding:7px 5px}.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{width:100%;min-width:72px;max-width:100%;padding:6px 5px;font-size:12px;margin:2px 0;box-sizing:border-box}.cash-table .cash-filter-row th:nth-child(1){min-width:135px}.cash-table .cash-filter-row th:nth-child(3){min-width:155px}.cash-table .cash-filter-row th:nth-child(6),.cash-table .cash-filter-row th:nth-child(7){min-width:90px}#dashboard-cash-balance{display:block!important;visibility:visible!important}
-
-/* Authentication screen */
-.admin[hidden],#authGate[hidden]{display:none!important}
-#authGate{min-height:100vh;display:grid;place-items:center;background:#0a1932;padding:24px}
-.auth-panel{background:#fff;border-radius:18px;padding:34px;width:min(100%,420px);box-shadow:0 20px 80px #0004}
-.auth-panel h1{color:#0a1932;font-size:25px;margin:0 0 8px}
-.auth-panel p{color:#60708a}.auth-panel form{display:grid;gap:12px;margin-top:24px}
-.auth-panel label{font-weight:600;color:#26364b}.auth-panel input{padding:13px;border:1px solid #c7d1df;border-radius:8px;font-size:16px;width:100%}
-.auth-panel button{justify-content:center}.auth-panel #authError{color:#b91c1c;margin:0;min-height:1.3em}
-.auth-warning{padding:10px 18px;background:#fff4d6;color:#7b4c00;font-size:12px;font-weight:600}
