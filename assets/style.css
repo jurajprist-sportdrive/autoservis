@@ -57,3 +57,16 @@
 .tomi-documents-bar{padding:12px 16px!important;margin-bottom:12px!important}.tomi-documents-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}.tomi-documents-buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.tomi-documents-buttons .btn{white-space:normal!important;min-height:36px;padding:8px!important;font-size:12px!important;text-align:center}
 @media(max-width:950px){.tomi-job-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.tomi-documents-buttons{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.tomi-job-top{flex-direction:column}.tomi-job-status{align-items:flex-start;text-align:left;flex-direction:row;flex-wrap:wrap}.tomi-job-status>div{align-items:flex-start}.tomi-job-controls{grid-template-columns:1fr}.tomi-documents-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.tomi-job-status{flex-direction:row!important;align-items:stretch!important;gap:14px!important;text-align:left!important}
+.tomi-job-status>div{align-items:stretch!important;min-width:205px;flex:1}
+.tomi-status-select{width:100%;min-height:52px;border-radius:10px;border:2px solid #f59e0b;padding:9px 12px;font-size:16px;font-weight:800;cursor:pointer}
+.tomi-status-select.is-amber{background:#fff1c4;color:#92400e}
+.tomi-status-select.is-green{background:#dcfce7;border-color:#22c55e;color:#166534}
+.tomi-compact-select{width:100%;max-width:220px;padding:9px;border-radius:8px;font-weight:700}
+.tomi-payment-select{min-width:145px;padding:10px 12px;border-radius:9px;font-size:15px;font-weight:800;cursor:pointer}
+.tomi-payment-select.is-unpaid{background:#fee2e2;color:#991b1b;border:2px solid #ef4444}
+.tomi-payment-select.is-paid{background:#dcfce7;color:#166534;border:2px solid #22c55e}
+.tomi-ready-action,.tomi-ready-done{background:#15803d!important;color:white!important;border-color:#166534!important}
+@media(max-width:1100px){.tomi-job-top{flex-wrap:wrap}.tomi-job-status{width:100%}}
+@media(max-width:600px){.tomi-job-status{flex-direction:column!important;width:100%}.tomi-job-status>div{min-width:0;width:100%}}
