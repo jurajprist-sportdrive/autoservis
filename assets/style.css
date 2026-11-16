@@ -3,3 +3,12 @@
 
 /* Kasa: filtre priamo pod hlavičkou stĺpcov */
 .cash-table{min-width:1080px}.cash-table .cash-filter-row th{vertical-align:top;background:var(--surface,#f5f7fb);padding:7px 5px}.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{width:100%;min-width:72px;max-width:100%;padding:6px 5px;font-size:12px;margin:2px 0;box-sizing:border-box}.cash-table .cash-filter-row th:nth-child(1){min-width:135px}.cash-table .cash-filter-row th:nth-child(3){min-width:155px}.cash-table .cash-filter-row th:nth-child(6),.cash-table .cash-filter-row th:nth-child(7){min-width:90px}#dashboard-cash-balance{display:block!important;visibility:visible!important}
+/* Editory dokumentov */
+.tomi-doc-modal{width:min(1080px,96vw)!important;max-width:1080px!important;max-height:92vh;overflow:auto}
+.tomi-doc-editor{display:flex;flex-direction:column;gap:14px}
+.tomi-doc-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:3px solid #071460;padding-bottom:10px}
+.tomi-doc-banner img{width:min(370px,55%);height:auto}.tomi-doc-banner small{font-size:10px;color:#5b6475;max-width:250px}
+.tomi-doc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tomi-doc-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600}
+.tomi-doc-field input,.tomi-doc-field textarea,.tomi-doc-field select,.tomi-doc-table input,.tomi-doc-table select{width:100%;padding:8px;border:1px solid #cad3df;border-radius:5px;background:white;color:#15203a;font:inherit;min-width:0}
+.tomi-doc-table{overflow-x:auto}.tomi-doc-table table{width:100%;min-width:550px;border-collapse:collapse}.tomi-doc-table td,.tomi-doc-table th{padding:5px;border:1px solid #e2e8f0}.tomi-doc-table th{font-size:11px;background:#e9eef8}.tomi-doc-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:0;background:white;padding:12px 0;border-top:1px solid #ddd}
+@media(max-width:650px){.tomi-doc-grid{grid-template-columns:1fr}.tomi-doc-banner img{width:55%}}
