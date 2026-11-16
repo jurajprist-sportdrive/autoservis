@@ -23,3 +23,8 @@ Rozšírenie existujúceho statického admin panelu. Otvorte /admin/ na webhosti
 - Zákazník, vozidlo, stav zákazky a stav vozidla oddelene.
 - Požiadavky na diely navrchu menu, pri nových požiadavkách červený pulzujúci výstražný panel.
 - Demo používa localStorage. Pred nasadením zálohujte údaje. Schválenie je ručné označenie, nie elektronický súhlas zákazníka.
+
+
+### Aktualizácia upozornení a prác naviac
+- Požiadavky na diely: 0 = zelený panel a 0 v trojuholníku; >0 = výrazne pulzujúci červený panel a počet v trojuholníku. Bez duplicitného počítadla.
+- Práce naviac: zelené tlačidlo, samostatný PDF protokol, položky sa prenesú do zákazky až po potvrdení schválenia; verzovanie zostáva zachované.
