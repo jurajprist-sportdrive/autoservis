@@ -12,3 +12,16 @@
 .tomi-doc-field input,.tomi-doc-field textarea,.tomi-doc-field select,.tomi-doc-table input,.tomi-doc-table select{width:100%;padding:8px;border:1px solid #cad3df;border-radius:5px;background:white;color:#15203a;font:inherit;min-width:0}
 .tomi-doc-table{overflow-x:auto}.tomi-doc-table table{width:100%;min-width:550px;border-collapse:collapse}.tomi-doc-table td,.tomi-doc-table th{padding:5px;border:1px solid #e2e8f0}.tomi-doc-table th{font-size:11px;background:#e9eef8}.tomi-doc-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:0;background:white;padding:12px 0;border-top:1px solid #ddd}
 @media(max-width:650px){.tomi-doc-grid{grid-template-columns:1fr}.tomi-doc-banner img{width:55%}}
+
+/* AUTOSERVIS TOMI – priority dielov, extra práce */
+.tomi-parts-priority{font-weight:800!important;border:2px solid #b6c5d9!important;margin:9px 7px!important;padding:13px 9px!important;border-radius:12px!important}
+.tomi-parts-priority.tomi-urgent{background:#b91c1c!important;color:#fff!important;border:3px solid #ffbd33!important;box-shadow:0 0 0 3px #fca5a5,0 0 20px rgba(220,38,38,.6);animation:tomi-alert 1.5s ease-in-out infinite}
+.tomi-parts-priority.tomi-urgent *{color:#fff!important}
+@keyframes tomi-alert{50%{box-shadow:0 0 0 5px #fca5a5,0 0 32px rgba(220,38,38,.85)}}
+.tomi-extra-main{font-size:18px!important;font-weight:900!important;background:#c1272d!important;color:#fff!important;padding:16px 24px!important;border:2px solid #881337!important;min-height:55px}
+.tomi-extra-main:hover{filter:brightness(1.08)}
+.tomi-extra-box{border:2px solid #b7c5db!important;margin-bottom:16px!important}
+.tomi-extra-alert{background:#fff1f2;border:2px solid #e11d48;border-radius:10px;padding:10px 14px;color:#9f1239;font-weight:800}
+.tomi-extra-row{display:grid;grid-template-columns:minmax(180px,2fr) 110px 115px 46px;gap:8px;margin:8px 0;align-items:center}
+.tomi-extra-row input{width:100%;min-width:0}
+@media(max-width:700px){.tomi-extra-row{grid-template-columns:1fr 1fr}.tomi-extra-row input:first-child{grid-column:1/-1}}
