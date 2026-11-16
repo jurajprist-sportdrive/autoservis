@@ -70,3 +70,6 @@
 .tomi-ready-action,.tomi-ready-done{background:#15803d!important;color:white!important;border-color:#166534!important}
 @media(max-width:1100px){.tomi-job-top{flex-wrap:wrap}.tomi-job-status{width:100%}}
 @media(max-width:600px){.tomi-job-status{flex-direction:column!important;width:100%}.tomi-job-status>div{min-width:0;width:100%}}
+
+/* Payment remains a native selectable field, without the decorative arrow */
+.tomi-payment-select{appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;background-image:none!important;padding-right:12px!important;cursor:pointer!important}
