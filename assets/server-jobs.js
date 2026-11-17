@@ -14,7 +14,7 @@ async function load(){
   const [j,c,v]=await Promise.all(['jobs','customers','vehicles'].map(x=>api().request(x)));
   data={jobs:j.items||[],customers:c.items||[],vehicles:v.items||[]};ready=true;
  }catch(e){err=e.message;ready=false}
- finally{busy=false;renderServer();renderIntake()}
+ finally{busy=false;renderServer();renderIntake();renderQuotes()}
 }
 function renderServer(){
  if(location.hash!=='#jobs')return;
@@ -23,6 +23,25 @@ function renderServer(){
  target.querySelector('#sjReload')?.addEventListener('click',load);
  target.querySelector('#sjNew')?.addEventListener('click',()=>edit());
  target.querySelectorAll('[data-sj]').forEach(b=>b.addEventListener('click',()=>details(data.jobs.find(x=>String(x.id)===b.dataset.sj))));
+}
+
+
+async function renderQuotes(){
+ if(location.hash!=='#quotes')return;
+ const target=document.getElementById('app');if(!target)return;
+ if(!ready){target.innerHTML=`<div class="pagehead"><h1>Cenové ponuky</h1></div><div class="card">${esc(err||'Načítavam cenové ponuky z MariaDB…')}</div>`;return;}
+ target.innerHTML='<div class="pagehead"><div><h1>Cenové ponuky</h1><p>Údaje z MariaDB · položky viazané na konkrétne vozidlo</p></div><button class="btn outline" id="sqRefresh">Obnoviť</button></div><div class="card" id="sqList">Načítavam položky cenových ponúk…</div>';
+ target.querySelector('#sqRefresh').onclick=load;
+ const snapshot=data.jobs.slice();
+ const records=await Promise.all(snapshot.map(async j=>{
+  try{const r=await api().request('job_items&job_id='+encodeURIComponent(j.id));return {job:j,items:(r.items||[]).filter(i=>i.section==='quote'),error:null}}
+  catch(e){return {job:j,items:[],error:e.message}}
+ }));
+ if(location.hash!=='#quotes'||!target.isConnected)return;
+ const list=target.querySelector('#sqList');if(!list)return;
+ const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+ list.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Zákazník</th><th>Vozidlo</th><th>CP</th><th>Spolu</th><th></th></tr></thead><tbody>${records.map(({job:j,items,error})=>`<tr><td>${esc(j.job_number)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${error?`<span style="color:#b91c1c">${esc(error)}</span>`:items.length?'Rozpracovaná ('+items.length+' položiek)':'Bez položiek'}</td><td>${money(items.reduce((sum,i)=>sum+Number(i.quantity)*Number(i.sale_unit_net),0))}</td><td><button class="btn outline small" data-sq="${esc(j.id)}">Otvoriť CP</button></td></tr>`).join('')}</tbody></table></div>`;
+ list.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>details(data.jobs.find(j=>String(j.id)===b.dataset.sq),'quote'));
 }
 
 function renderIntake(){
@@ -160,7 +179,8 @@ function itemForm(job,item,back){
 
 window.jobs=()=>'<div class="card">Načítavam zákazky z Websupportu…</div>';
 window.intake=()=>'<div class="card">Načítavam príjem vozidiel z Websupportu…</div>';
+window.quotes=()=>'<div class="card">Načítavam cenové ponuky z MariaDB…</div>';
 window.newJob=()=>edit();
-window.addEventListener('hashchange',()=>{if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0)});
-if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0);
+window.addEventListener('hashchange',()=>{if(['#jobs','#intake','#quotes'].includes(location.hash))setTimeout(load,0)});
+if(['#jobs','#intake','#quotes'].includes(location.hash))setTimeout(load,0);
 })();
