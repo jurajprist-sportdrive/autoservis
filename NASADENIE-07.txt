@@ -1,0 +1,7 @@
+Aktualizácia 07 – Potrebujem diely. Obsahuje celý frontend 06 a API 06.
+1. Zálohujte existujúci API index.php a GitHub repozitár.
+2. Nahrajte WEBSUPPORT-API/index.php na Websupport a GITHUB/ do GitHub repozitára.
+3. Otvorte zákazku, pridajte požiadavku na diel, stlačte F5 a overte zachovanie.
+4. Otestujte zmenu stavu Čaká → Objednané → Dodané.
+Používa existujúcu tabuľku part_requests, nevyžaduje SQL migráciu.
+Upozornenie: Mechanik zatiaľ nemá samostatné bezpečne oddelené rozhranie. Stav môže meniť len technik/admin cez API; pre všetky roly sa UI ešte musí prispôsobiť. Kasa, rezervácie a dochádzka zostávajú nedokončené.
