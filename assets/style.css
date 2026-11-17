@@ -162,3 +162,5 @@
 .sj-quote-editor .sj-field span{font-weight:650}
 .sj-quote-totals{display:flex;gap:18px;justify-content:flex-end;flex-wrap:wrap;padding:15px;background:#eaf2f8;border-radius:8px;margin-top:15px}
 @media(max-width:650px){.sj-quote-dialog{width:100vw!important;max-height:100dvh!important}.sj-quote-editor{padding:12px}.sj-quote-totals{flex-direction:column;gap:5px}}
+
+.sj-quote-decision{margin-top:18px;padding:16px;border:1px solid #cad8e6;border-radius:10px;background:#f3f8fc;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.sj-quote-decision .sj-actions{display:flex;gap:8px;flex-wrap:wrap}

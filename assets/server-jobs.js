@@ -61,19 +61,33 @@ async function openQuote(job){
  };
  async function refresh(){
   try{
-   const r=await api().request('job_items&job_id='+encodeURIComponent(job.id));
+   const [r,decisionResponse]=await Promise.all([api().request('job_items&job_id='+encodeURIComponent(job.id)),api().request('quote_decision&job_id='+encodeURIComponent(job.id))]);
+   const decision=decisionResponse.decision?.status||'pending';
    const items=(r.items||[]).filter(i=>i.section==='quote');
    const group=(type,title)=>`<h3>${title}</h3><div class="tablewrap"><table><thead><tr><th>Popis</th><th>Množstvo</th><th>${company?'Bez DPH / MJ':'Cena / MJ'}</th>${company?'<th>S DPH / MJ</th>':''}<th>Spolu</th><th></th></tr></thead><tbody>${items.filter(i=>i.item_type===type).map(i=>`<tr><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td>${money(i.sale_unit_net)}</td>${company?`<td>${money(Number(i.sale_unit_net)*(1+Number(i.vat_rate)/100))}</td>`:''}<td>${money(Number(i.quantity)*Number(i.sale_unit_net))}</td><td><button class="btn outline small" data-qi="${esc(i.id)}">Upraviť</button></td></tr>`).join('')||'<tr><td colspan="6">Zatiaľ bez položiek</td></tr>'}</tbody></table></div>`;
    const net=items.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0);
    const gross=items.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net)*(1+Number(i.vat_rate)/100),0);
-   content.innerHTML=`<p>CP k zákazke <strong>${esc(job.job_number)}</strong> · ${company?'Firma – bez DPH / s DPH':'FO – jedna cena'}</p>${group('labor','01 NAVRHOVANÉ PRÁCE')}${group('part','02 NAVRHOVANÉ DIELY A MATERIÁL')}<div class="sj-quote-totals"><strong>${company?'Spolu bez DPH':'Celkom'}: ${money(net)}</strong>${company?`<strong>DPH: ${money(gross-net)}</strong><strong>Spolu s DPH: ${money(gross)}</strong>`:''}</div><div class="sj-actions"><button class="btn" id="sqAdd">+ Pridať položku</button><button class="btn outline" id="sqPdf">Cenová ponuka · PDF</button></div>`;
+   content.innerHTML=`<p>CP k zákazke <strong>${esc(job.job_number)}</strong> · ${company?'Firma – bez DPH / s DPH':'FO – jedna cena'}</p>${group('labor','01 NAVRHOVANÉ PRÁCE')}${group('part','02 NAVRHOVANÉ DIELY A MATERIÁL')}<div class="sj-quote-totals"><strong>${company?'Spolu bez DPH':'Celkom'}: ${money(net)}</strong>${company?`<strong>DPH: ${money(gross-net)}</strong><strong>Spolu s DPH: ${money(gross)}</strong>`:''}</div><div class="sj-actions"><button class="btn" id="sqAdd" ${decision!=='pending'?'disabled':''}>+ Pridať položku</button><button class="btn outline" id="sqPdf">Cenová ponuka · PDF</button></div><div class="sj-quote-decision"><strong>Stav CP: ${decision==='approved'?'SCHVÁLENÁ':decision==='rejected'?'ZAMIETNUTÁ':'ČAKÁ NA SCHVÁLENIE'}</strong>${decision==='pending'?'<div class="sj-actions"><button class="btn" id="sqApprove">✓ SCHVÁLIŤ CP</button><button class="btn outline" id="sqReject">✕ ZAMIETNUŤ CP</button></div>':''}</div>`;
    content.querySelector('#sqAdd').onclick=()=>renderForm({item_type:'labor'});
    content.querySelectorAll('[data-qi]').forEach(b=>b.onclick=()=>renderForm(items.find(i=>String(i.id)===b.dataset.qi)));
    content.querySelector('#sqPdf').onclick=()=>printDocument(job,items,'quote');
+   for(const [id,status] of [['sqApprove','approved'],['sqReject','rejected']]){
+    const btn=content.querySelector('#'+id);if(!btn)continue;
+    btn.onclick=async()=>{
+     if(!confirm(status==='approved'?'Schváliť CP a preniesť položky do zákazkového listu?':'Zamietnuť CP?'))return;
+     btn.disabled=true;
+     try{await api().request('quote_decision&job_id='+encodeURIComponent(job.id),'POST',{status});
+      overlay.remove();await load();if(status==='approved'){const updated=data.jobs.find(j=>String(j.id)===String(job.id));if(updated)details(updated,'work_order')}
+      else if(location.hash==='#quotes')renderQuotes();
+     }catch(e){alert('Rozhodnutie CP sa nepodarilo uložiť: '+e.message);btn.disabled=false}
+    };
+   }
+
   }catch(e){content.innerHTML='<p role="alert">Nepodarilo sa načítať CP: '+esc(e.message)+'</p>'}
  }
  await refresh();
 }
+window.TomiOpenQuoteById=async id=>{if(!ready)await load();const j=data.jobs.find(x=>String(x.id)===String(id));if(!j){alert('Zákazka sa nenašla v MariaDB');return}return openQuote(j)};
 async function renderQuotes(){
  if(location.hash!=='#quotes')return;
  const target=document.getElementById('app');if(!target)return;
@@ -82,13 +96,13 @@ async function renderQuotes(){
  target.querySelector('#sqRefresh').onclick=load;
  const snapshot=data.jobs.slice();
  const records=await Promise.all(snapshot.map(async j=>{
-  try{const r=await api().request('job_items&job_id='+encodeURIComponent(j.id));return {job:j,items:(r.items||[]).filter(i=>i.section==='quote'),error:null}}
+  try{const [r,d]=await Promise.all([api().request('job_items&job_id='+encodeURIComponent(j.id)),api().request('quote_decision&job_id='+encodeURIComponent(j.id))]);return {job:j,items:(r.items||[]).filter(i=>i.section==='quote'),decision:d.decision?.status||'pending',error:null}}
   catch(e){return {job:j,items:[],error:e.message}}
  }));
  if(location.hash!=='#quotes'||!target.isConnected)return;
  const list=target.querySelector('#sqList');if(!list)return;
  const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
- list.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Zákazník</th><th>Vozidlo</th><th>CP</th><th>Spolu</th><th></th></tr></thead><tbody>${records.map(({job:j,items,error})=>`<tr><td>${esc(j.job_number)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${error?`<span style="color:#b91c1c">${esc(error)}</span>`:items.length?'Rozpracovaná ('+items.length+' položiek)':'Bez položiek'}</td><td>${money(items.reduce((sum,i)=>sum+Number(i.quantity)*Number(i.sale_unit_net),0))}</td><td><button class="btn outline small" data-sq="${esc(j.id)}">Otvoriť CP</button></td></tr>`).join('')}</tbody></table></div>`;
+ list.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Zákazník</th><th>Vozidlo</th><th>CP</th><th>Spolu</th><th></th></tr></thead><tbody>${records.map(({job:j,items,error,decision})=>`<tr><td>${esc(j.job_number)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${error?`<span style="color:#b91c1c">${esc(error)}</span>`:decision==='approved'?'Schválená':decision==='rejected'?'Zamietnutá':items.length?'Čaká na schválenie ('+items.length+' položiek)':'Bez položiek'}</td><td>${money(items.reduce((sum,i)=>sum+Number(i.quantity)*Number(i.sale_unit_net),0))}</td><td><button class="btn outline small" data-sq="${esc(j.id)}">Otvoriť CP</button></td></tr>`).join('')}</tbody></table></div>`;
  list.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>openQuote(data.jobs.find(j=>String(j.id)===b.dataset.sq)));
 }
 
@@ -221,6 +235,7 @@ async function details(job,openSection){
  target.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>target.querySelector('#'+b.dataset.jump)?.scrollIntoView({behavior:'smooth',block:'start'}));
  if(openSection==='quote'){target.querySelector('#sjQuoteBlock')?.scrollIntoView({behavior:'smooth',block:'start'});target.querySelector('#sjQuoteBlock')?.classList.add('sj-focus')} 
  if(openSection==='work_order')target.querySelector('#sjOrderBlock')?.scrollIntoView({behavior:'smooth',block:'start'});
+ const approveFromJob=document.createElement('button');approveFromJob.className='btn';approveFromJob.textContent='Otvoriť CP · SCHVÁLIŤ / ZAMIETNUŤ';approveFromJob.id='sjOpenQuoteApproval';approveFromJob.onclick=()=>openQuote(job);const heading=target.querySelector('.pagehead');if(heading)heading.append(approveFromJob);
  target.querySelector('#sjBack').onclick=()=>{location.hash='#jobs';load()};
  target.querySelector('#sjEdit').onclick=()=>edit(job);
  target.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>itemForm(job,{section:b.dataset.add},details));
