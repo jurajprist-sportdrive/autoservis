@@ -214,3 +214,25 @@
 
 /* TEST 33 – compact cash layout */
 .cash-balance-inline{display:inline-flex;align-items:center;gap:9px;padding:7px 11px;border:1px solid #dce5ee;border-radius:7px;color:#6c7e91;font-size:12px;background:#f8fafc;white-space:nowrap}.cash-balance-inline strong{font-size:14px;color:#243a54}.cash-period{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:8px 0;color:#687a8d;font-size:12px;border-bottom:1px solid #e9edf2}.cash-period label{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.cash-period input{width:auto}.cash-summary-line{display:flex;gap:22px;flex-wrap:wrap;padding:9px 0 14px;color:#8b98a7;font-size:12px}.cash-date-pair{display:flex;gap:6px;flex-wrap:wrap}.cash-date-pair label{font-size:10px;color:#8492a1;min-width:110px;flex:1}.cash-date-pair input{display:block;width:100%;min-width:105px;box-sizing:border-box}.cash-table .cash-filter-row th{vertical-align:top}.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{max-width:100%;box-sizing:border-box}@media(max-width:850px){.cash-summary-line{gap:10px}.cash-date-pair{min-width:120px}}
+
+/* TEST 34 – kasa: single-width, aligned filters, compact summary */
+#app:has(.cash-table) .pagehead .actions{display:flex;flex-wrap:wrap;gap:5px;align-items:center;justify-content:flex-end}
+#app:has(.cash-table) .pagehead .actions .btn{padding:7px 9px;font-size:11px;white-space:nowrap}
+.cash-action-new{background:#15803d!important;border-color:#15803d!important;color:white!important}
+.cash-action-deposit{background:#2563eb!important;border-color:#2563eb!important;color:white!important}
+.cash-action-withdraw{background:#eab308!important;border-color:#eab308!important;color:#242424!important}
+#app:has(.cash-table) .card{min-width:0;max-width:100%;overflow:hidden}
+#app:has(.cash-table) .tablewrap{width:100%;max-width:100%;overflow-x:hidden}
+.cash-table{width:100%!important;min-width:0!important;table-layout:fixed;border-collapse:collapse}
+.cash-table th,.cash-table td{min-width:0!important;max-width:0;overflow-wrap:anywhere;word-break:normal;padding:7px 4px;font-size:11px}
+.cash-table th:nth-child(1){width:12%}.cash-table th:nth-child(2){width:8%}.cash-table th:nth-child(3){width:18%}.cash-table th:nth-child(4){width:9%}.cash-table th:nth-child(5){width:5%}.cash-table th:nth-child(6){width:9%}.cash-table th:nth-child(7){width:10%}.cash-table th:nth-child(8){width:10%}.cash-table th:nth-child(9){width:19%}
+.cash-table .cash-filter-row th{vertical-align:middle!important;padding:5px 3px!important}
+.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{display:block;width:100%;min-width:0!important;max-width:100%;height:29px;padding:3px 2px;font-size:10px;margin:0;box-sizing:border-box}
+.cash-date-pair,.cash-amount-pair{display:flex;flex-direction:column;gap:3px;min-width:0;width:100%}
+.cash-date-pair input{min-width:0!important;width:100%!important;font-size:9px!important;padding:2px 0!important}
+.cash-table td:last-child .btn{font-size:10px;padding:4px 5px;margin:2px}
+.cash-summary-panel{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:8px 0 14px;border-bottom:1px solid #e9edf2}
+.cash-summary-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0;color:#8995a4;font-size:11px;flex:1}
+.cash-balance-summary{display:flex;flex-direction:column;align-items:flex-end;white-space:nowrap;border-left:1px solid #e5eaf0;padding-left:16px;color:#748498;font-size:11px}
+.cash-balance-summary strong{font-size:20px;color:#29415d;font-weight:700}
+@media(max-width:800px){.cash-table th,.cash-table td{font-size:9px;padding:4px 2px}.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{font-size:9px}.cash-table td:last-child .btn{font-size:9px;padding:3px}.cash-summary-line{gap:7px}.cash-balance-summary strong{font-size:16px}}
