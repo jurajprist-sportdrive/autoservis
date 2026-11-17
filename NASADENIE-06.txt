@@ -1,0 +1,9 @@
+Aktualizácia 06: dokumenty a fotografie k zákazkám uložené na Websupport serveri.
+1. ZÁLOHUJTE aktuálny Websupport API index.php a celý GitHub repozitár.
+2. Nahrajte WEBSUPPORT-API/index.php do autoservistomi.sk/sub/api/index.php.
+3. Nahrajte obsah GITHUB do koreňa GitHub repozitára autoservis.
+4. Na Websupporte musí byť zapisovateľný adresár autoservistomi.sk/private/ (API vytvorí job_files).
+5. Prihláste sa a v zákazke otestujte PDF/JPG upload a následné stiahnutie po F5.
+6. Na Websupporte skontrolujte php.ini upload_max_filesize a post_max_size (odporúčané >= 12M).
+7. DÔLEŽITÉ: existujúce staré dokumenty sa automaticky nemigrujú. PDF vytvorené tlačou treba manuálne nahrať na archiváciu.
+Nie je to finálny balík celého systému: Kasa, mechanici, rezervácie a finančné reporty ešte nie sú kompletne integrované.

@@ -1,0 +1,9 @@
+AUTOSERVIS TOMI – Integrované PDF dokumenty k databázovej zákazke
+1. Zálohujte aktuálny GitHub projekt.
+2. Nahrajte obsah priečinka GITHUB do koreňa repozitára.
+3. Websupport API z aktualizácie 04 ponechajte bez zmeny.
+4. Otvorte zákazku, vyskúšajte tlač Cenovej ponuky, Zákazkového listu, Prijímacieho a Odovzdávacieho protokolu.
+5. V dialógu tlače zvoľte „Uložiť ako PDF“.
+POZOR: PDF sa generujú na tlač z DB údajov, NEARCHIVUJÚ sa na serveri.
+PDF dokumenty používajú jednoduchú jednotnú šablónu; nenahrádzajú predchádzajúce špeciálne vzory.
+Pred ostrou prevádzkou zostáva dokončiť: archiváciu PDF, Kasu, prácu mechanikov, verejné rezervácie, testy bezpečnosti a zálohovania.
