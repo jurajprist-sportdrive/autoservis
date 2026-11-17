@@ -23,7 +23,7 @@
     const headers={'Accept':'application/json'};
     if(body!==undefined)headers['Content-Type']='application/json';
     if(authenticated&&token)headers.Authorization='Bearer '+token;
-    const res=await fetch(API+'?action='+encodeURIComponent(action),{method,headers,body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'});
+    const res=await fetch(API+'?action='+encodeURIComponent(action.split('&')[0])+(action.includes('&')?'&'+action.split('&').slice(1).join('&'):''),{method,headers,body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'});
     let data;try{data=await res.json()}catch{throw Error('API nevrátilo platnú JSON odpoveď');}
     if(!res.ok)throw Error(data.error||'Chyba servera ('+res.status+')');
     return data;
