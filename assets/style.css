@@ -192,3 +192,22 @@
 @media(max-width:700px){.sj-controls .sj-save-inline{flex:0 0 auto}.sj-request-form input[name=description]{flex-basis:100%}.sj-identity strong{font-size:17px!important}}
 
 .sj-filter-panel{margin-bottom:14px}.sj-filter-states{display:flex;flex-wrap:wrap;gap:10px 20px;padding:12px 0}.sj-filter-states label{display:flex;align-items:center;gap:5px;white-space:nowrap}.sj-filter-fields{display:grid;grid-template-columns:minmax(210px,2fr) 1fr 1fr auto;gap:12px;align-items:end}.sj-filter-fields label{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600}.sj-filter-fields input{width:100%;min-height:38px;padding:8px;border:1px solid #bdcddd;border-radius:7px}.sj-payment-label{font-weight:700}.sj-payment-label.paid{color:#148047}.sj-payment-label.unpaid{color:#bd3030}@media(max-width:750px){.sj-filter-fields{grid-template-columns:1fr 1fr}.sj-filter-fields label:first-child{grid-column:1/-1}}
+
+/* TEST 31: spoločný tabuľkový zoznam a prehľadný historický detail */
+.sj-history-dialog{width:min(1100px,96vw);max-height:94vh;overflow:auto}
+.sj-history-body{padding:20px 24px 28px}
+.sj-history-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.sj-history-meta span{display:flex;flex-direction:column;gap:4px;padding:12px;background:#f3f7fd;border:1px solid #dbe6f5;border-radius:8px;overflow-wrap:anywhere}
+.sj-history-meta strong{font-size:12px;color:#536b86}
+.sj-history-section{border:1px solid #d3e0f0;border-radius:10px;margin:16px 0;overflow:hidden}
+.sj-history-section h3{margin:0;padding:13px 16px;background:#eaf2ff;color:#16477d;font-size:15px}
+.sj-history-section .tablewrap{margin:0}.sj-history-section table{width:100%;border-collapse:collapse}
+.sj-history-section th,.sj-history-section td{padding:10px 12px;border-bottom:1px solid #e4ebf4;text-align:left}
+.sj-history-section .num{text-align:right;white-space:nowrap}
+.sj-history-subtotal{text-align:right;padding:12px 16px;background:#f8fbff}
+.sj-history-subtotal strong{margin-left:18px}
+.sj-history-totals{display:flex;justify-content:flex-end;gap:20px;flex-wrap:wrap;padding:18px;border:1px solid #d3e0f0;border-radius:10px}
+.sj-history-totals span{display:flex;flex-direction:column;gap:5px}
+.sj-history-totals span:last-child{color:#16477d;font-weight:700;font-size:17px}
+.sj-history-notes{padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:650px){.sj-history-meta{grid-template-columns:repeat(2,minmax(0,1fr))}.sj-history-body{padding:12px}.sj-history-section th,.sj-history-section td{padding:8px;font-size:12px}}
