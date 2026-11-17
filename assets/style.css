@@ -236,3 +236,15 @@
 .cash-balance-summary{display:flex;flex-direction:column;align-items:flex-end;white-space:nowrap;border-left:1px solid #e5eaf0;padding-left:16px;color:#748498;font-size:11px}
 .cash-balance-summary strong{font-size:20px;color:#29415d;font-weight:700}
 @media(max-width:800px){.cash-table th,.cash-table td{font-size:9px;padding:4px 2px}.cash-table .cash-filter-row input,.cash-table .cash-filter-row select{font-size:9px}.cash-table td:last-child .btn{font-size:9px;padding:3px}.cash-summary-line{gap:7px}.cash-balance-summary strong{font-size:16px}}
+
+/* v35: compact cash action layout, quick filters, range picker */
+.cash-custom-range{display:flex;gap:12px;align-items:center;padding:10px 0;flex-wrap:wrap}
+.cash-custom-range[hidden]{display:none!important}
+.cash-custom-range label{font-size:12px;color:#64748b;display:flex;gap:6px;align-items:center}
+.cash-custom-range input{font:inherit;padding:6px;border:1px solid #d8e1eb;border-radius:6px}
+.cash-filter-row{background:#f8fafc}
+.cash-table{width:100%;min-width:0!important;table-layout:fixed}
+.cash-table td,.cash-table th{overflow-wrap:anywhere}
+.cash-table td:last-child .btn{margin:2px}
+.cash-table .cash-filter-row th:nth-child(1){min-width:0}
+@media(max-width:1100px){.cash-table{font-size:11px}.cash-table th,.cash-table td{padding:5px 3px}}
