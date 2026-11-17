@@ -14,7 +14,7 @@ async function load(){
   const [j,c,v]=await Promise.all(['jobs','customers','vehicles'].map(x=>api().request(x)));
   data={jobs:j.items||[],customers:c.items||[],vehicles:v.items||[]};ready=true;
  }catch(e){err=e.message;ready=false}
- finally{busy=false;renderServer()}
+ finally{busy=false;renderServer();renderIntake()}
 }
 function renderServer(){
  if(location.hash!=='#jobs')return;
@@ -23,6 +23,16 @@ function renderServer(){
  target.querySelector('#sjReload')?.addEventListener('click',load);
  target.querySelector('#sjNew')?.addEventListener('click',()=>edit());
  target.querySelectorAll('[data-sj]').forEach(b=>b.addEventListener('click',()=>details(data.jobs.find(x=>String(x.id)===b.dataset.sj))));
+}
+
+function renderIntake(){
+ if(location.hash!=='#intake')return;
+ const target=document.getElementById('app');if(!target)return;
+ const pending=data.jobs.filter(j=>['pending','inspection','quote_pending','quote','waiting_quote'].includes(String(j.status||'pending')));
+ target.innerHTML=`<div class="pagehead"><div><h1>Príjem vozidiel</h1><p>Vozidlá čakajúce na obhliadku alebo schválenie cenovej ponuky</p></div><div class="actions"><button class="btn outline" id="siReload">Obnoviť</button><button class="btn" id="siReceive">+ Prijať vozidlo</button></div></div>${err?`<div class="card" role="alert">${esc(err)}</div>`:''}${busy?'<div class="card">Načítavam vozidlá…</div>':!ready?'<div class="card">Nepodarilo sa načítať databázu.</div>':`<div class="card"><h3>Prijaté vozidlá (${pending.length})</h3><div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Zákazník</th><th>Vozidlo</th><th>Stav</th><th></th></tr></thead><tbody>${pending.map(j=>`<tr><td>${esc(j.job_number)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${esc(j.status)}</td><td><button class="btn small outline" data-si="${j.id}">Otvoriť</button></td></tr>`).join('')}</tbody></table></div>${pending.length?'':'<p>Žiadne vozidlá čakajúce na príjme.</p>'}</div>`}`;
+ target.querySelector('#siReload')?.addEventListener('click',load);
+ target.querySelector('#siReceive')?.addEventListener('click',()=>edit());
+ target.querySelectorAll('[data-si]').forEach(b=>b.addEventListener('click',()=>details(data.jobs.find(j=>String(j.id)===b.dataset.si))));
 }
 function edit(j={}){
  if(!ready){alert('Najprv sa musia načítať údaje z databázy.');return}
@@ -116,7 +126,8 @@ function itemForm(job,item,back){
 }
 
 window.jobs=()=>'<div class="card">Načítavam zákazky z Websupportu…</div>';
+window.intake=()=>'<div class="card">Načítavam príjem vozidiel z Websupportu…</div>';
 window.newJob=()=>edit();
-window.addEventListener('hashchange',()=>{if(location.hash==='#jobs')setTimeout(load,0)});
-if(location.hash==='#jobs')setTimeout(load,0);
+window.addEventListener('hashchange',()=>{if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0)});
+if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0);
 })();
