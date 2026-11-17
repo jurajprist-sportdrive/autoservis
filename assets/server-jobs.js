@@ -340,7 +340,16 @@ async function details(job,openSection){
  target.querySelector('#sjStatus').onchange=()=>{const status=target.querySelector('#sjStatus').value;if(['service','ready'].includes(status))target.querySelector('#sjOnsite').value='1';if(['completed','not_realized'].includes(status))target.querySelector('#sjOnsite').value='0';paintStatus()};
  target.querySelector('#sjOnsite').onchange=paintStatus;
  function paintStatus(){const status=target.querySelector('#sjStatus');status.dataset.state=status.value;const onsite=target.querySelector('#sjOnsite');onsite.dataset.state=onsite.value==='1'?'onsite':'outside'}paintStatus();
- target.querySelector('#sjSaveState').onclick=async()=>{const b=target.querySelector('#sjSaveState');b.disabled=true;try{await api().request('jobs&id='+job.id,'PUT',{status:target.querySelector('#sjStatus').value,vehicle_on_site:['service','ready'].includes(target.querySelector('#sjStatus').value)?1:['completed','not_realized'].includes(target.querySelector('#sjStatus').value)?0:Number(target.querySelector('#sjOnsite').value),invoice_status:target.querySelector('#sjPayment').value,invoice_number:target.querySelector('#sjInvoice').value.trim()});await load();const updated=data.jobs.find(j=>String(j.id)===String(job.id));if(updated)await details(updated)}catch(e){alert('Stav sa nepodarilo uložiť: '+e.message);b.disabled=false}};
+ target.querySelector('#sjSaveState').onclick=async()=>{const b=target.querySelector('#sjSaveState');b.disabled=true;try{await api().request('jobs&id='+job.id,'PUT',{status:target.querySelector('#sjStatus').value,vehicle_on_site:['service','ready'].includes(target.querySelector('#sjStatus').value)?1:['completed','not_realized'].includes(target.querySelector('#sjStatus').value)?0:Number(target.querySelector('#sjOnsite').value),invoice_status:target.querySelector('#sjPayment').value,invoice_number:target.querySelector('#sjInvoice').value.trim()});if(target.querySelector('#sjStatus').value==='not_realized'){
+          // Cancel outstanding requests in the API; retain their audit/history records.
+          const response=await api().request('part_requests&job_id='+encodeURIComponent(job.id));
+          const active=(response.items||[]).filter(r=>!['resolved','completed','cancelled','done','vybavené','zrušené'].includes(String(r.status||'').toLowerCase()));
+          const failed=[];
+          for(const r of active){try{await api().request('part_requests&job_id='+encodeURIComponent(job.id)+'&id='+encodeURIComponent(r.id),'PUT',{status:'cancelled'})}catch(err){failed.push(String(r.id))}}
+          if(failed.length)alert('Zákazka je nerealizovaná, ale nepodarilo sa zrušiť '+failed.length+' požiadaviek na diely. Skontrolujte API a požiadavky v zákazke.');
+        }
+        window.dispatchEvent(new Event('tomi-yard-refresh'));
+        await load();const updated=data.jobs.find(j=>String(j.id)===String(job.id));if(updated)await details(updated)}catch(e){alert('Stav sa nepodarilo uložiť: '+e.message);b.disabled=false}};
  target.querySelector('#sjBack').onclick=()=>{location.hash='#jobs';load()};
  target.querySelector('#sjEdit').onclick=()=>edit(job);
  target.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>itemForm(job,items.find(i=>String(i.id)===b.dataset.item),details));

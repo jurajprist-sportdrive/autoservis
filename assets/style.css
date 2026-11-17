@@ -256,3 +256,9 @@
 .navlink[data-page="parts"] .tomi-warning-triangle #tomi-parts-count{margin:13px 0 0!important;padding:0!important;line-height:1!important;font-size:29px!important;font-weight:900!important;color:#fff!important}
 .navlink[data-page="parts"].tomi-clear{background:rgba(22,163,74,.10)!important}
 @media(prefers-reduced-motion:reduce){.navlink[data-page="parts"].tomi-urgent .tomi-warning-triangle{animation:none!important}}
+
+/* v37: large new movement button inside cash summary, left of balance */
+.cash-summary-new{align-self:stretch;min-height:58px;min-width:150px;white-space:nowrap;font-weight:700;margin-left:auto}
+.cash-summary-panel{gap:12px}
+.cash-summary-panel .cash-summary-line{margin-right:auto;min-width:0}
+@media(max-width:650px){.cash-summary-new{min-width:100px;font-size:11px;padding:8px}.cash-summary-panel{gap:6px}.cash-balance-summary{padding-left:8px}}
