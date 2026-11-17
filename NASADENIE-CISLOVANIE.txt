@@ -1,0 +1,8 @@
+AUTOSERVIS TOMI: automatické číslovanie zákaziek
+1. Zálohujte aktuálny index.php na Websupporte.
+2. Nahrajte nový index.php z priečinka WEBsupport-API do autoservistomi.sk/sub/api/.
+3. Nahrajte ostatné súbory z priečinka GITHUB do koreňa GitHub repozitára.
+4. Test: založte dve zákazky, skontrolujte poradové čísla, obnovte stránku a skontrolujte znova.
+5. Číslovanie je serverové: 2026-0001, 2026-0002...; od 1.1.2027 2027-0001.
+6. Existujúce čísla sa nemenia. Súbežné požiadavky sú serializované pomocou MariaDB GET_LOCK.
+7. Zatiaľ ide o testovaciu verziu: dokumenty, položky, kasa nie sú pripojené na DB.
