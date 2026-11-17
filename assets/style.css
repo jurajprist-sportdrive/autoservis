@@ -248,3 +248,11 @@
 .cash-table td:last-child .btn{margin:2px}
 .cash-table .cash-filter-row th:nth-child(1){min-width:0}
 @media(max-width:1100px){.cash-table{font-size:11px}.cash-table th,.cash-table td{padding:5px 3px}}
+
+/* V36: single in-triangle counter; no secondary badge */
+.navlink[data-page="parts"] .tomi-parts-marker,.navlink[data-page="parts"] .request-alert{display:none!important}
+.navlink[data-page="parts"] .tomi-warning-triangle{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;width:58px!important;height:53px!important;flex:0 0 58px!important;background:#16a34a!important;clip-path:polygon(50% 3%,98% 96%,2% 96%)!important}
+.navlink[data-page="parts"].tomi-urgent .tomi-warning-triangle{background:#dc2626!important;animation:tomi-alert-strong 1s ease-in-out infinite!important}
+.navlink[data-page="parts"] .tomi-warning-triangle #tomi-parts-count{margin:13px 0 0!important;padding:0!important;line-height:1!important;font-size:29px!important;font-weight:900!important;color:#fff!important}
+.navlink[data-page="parts"].tomi-clear{background:rgba(22,163,74,.10)!important}
+@media(prefers-reduced-motion:reduce){.navlink[data-page="parts"].tomi-urgent .tomi-warning-triangle{animation:none!important}}
