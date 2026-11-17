@@ -5,7 +5,7 @@ let jobs=[],sessions=[];
 const types={inspection:'Obhliadka / diagnostika',work:'Práca na vozidle',test_drive:'Skúšobná jazda'};
 const dur=n=>{n=Math.max(0,Number(n)||0);return Math.floor(n/3600)+' h '+Math.floor(n%3600/60)+' min';};
 async function load(){const el=document.getElementById('app');if(!el)return;el.innerHTML='<div class="card">Načítavam prácu mechanika…</div>';
-try{const [j,s]=await Promise.all([api().request('mechanic_jobs'),api().request('work_sessions')]);jobs=j.items||[];sessions=s.items||[];render();}catch(e){el.innerHTML='<div class="card" role="alert">'+esc(e.message)+'</div>';}}
+try{const [j,s]=await Promise.all([api().request('mechanic_jobs'),api().request('work_sessions')]);jobs=(j.items||[]).filter(x=>!['not_realized','cancelled','quote_rejected','rejected','completed'].includes(String(x.status||'').toLowerCase()));sessions=s.items||[];render();}catch(e){el.innerHTML='<div class="card" role="alert">'+esc(e.message)+'</div>';}}
 function render(){if(location.hash!=='#mechanic')return;const el=document.getElementById('app');if(!el)return;
 const active=sessions.find(x=>!x.ended_at);
 el.innerHTML=`<div class="pagehead"><div><h1>MECHANIK · Moja práca</h1><p>Čas sa zaznamenáva na serveri. Pri odhlásení časovač beží ďalej.</p></div><button class="btn outline" id="meReload">Obnoviť</button></div>
