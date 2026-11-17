@@ -5,6 +5,8 @@
   let token=sessionStorage.getItem('tomi_api_token')||'';
   const root=document.getElementById('authGate');
   const app=document.querySelector('.admin');
+  // Fail closed: keep admin hidden until API confirms session.
+  app.hidden=true;
   function showLogin(message=''){
     app.hidden=true;root.hidden=false;
     root.innerHTML=`<div class="auth-panel"><h1>AUTOSERVIS TOMI</h1><p>Prihlásenie do interného systému</p><form id="authForm"><label for="authUser">Používateľské meno</label><input id="authUser" autocomplete="username" required maxlength="100"><label for="authPass">Heslo</label><input id="authPass" type="password" autocomplete="current-password" required><p id="authError" role="alert">${message.replace(/[&<>"']/g,'')}</p><button class="btn" type="submit">Prihlásiť sa</button></form></div>`;
@@ -34,7 +36,8 @@
     if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
     const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='TESTOVACÍ REŽIM: Prihlásenie je overené serverom, ale zákazky a ostatné údaje sa zatiaľ ukladajú iba v tomto prehliadači. Nezadávajte reálne údaje zákazníkov.';
     document.querySelector('.workspace').prepend(warning);
-    const script=document.createElement('script');script.src='/assets/admin.js?v=20261116-auth-v1';document.body.append(script);
+    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-auth-gate'];
+    for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
   async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}
   init();
