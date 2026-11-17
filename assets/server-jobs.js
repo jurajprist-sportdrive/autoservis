@@ -28,20 +28,47 @@ function renderServer(){
 
 async function openQuote(job){
  if(!job)return;
- const overlay=document.createElement('div');overlay.className='sj-inspection-overlay';
- overlay.innerHTML=`<section class="sj-inspection-dialog sj-quote-dialog" role="dialog" aria-modal="true" aria-label="Cenová ponuka"><header class="sj-inspection-head"><div><small>CENOVÁ PONUKA · ${esc(job.job_number)}</small><h2>${esc(car(job.vehicle_id))}</h2><p>${esc(name(job.customer_id))}</p></div><button class="btn outline" id="sqClose">Zavrieť</button></header><div id="sqContent">Načítavam CP z databázy…</div></section>`;
- document.body.append(overlay);overlay.querySelector('#sqClose').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+ document.querySelectorAll('.sj-quote-overlay').forEach(x=>x.remove());
+ const overlay=document.createElement('div');overlay.className='sj-inspection-overlay sj-quote-overlay';
+ overlay.innerHTML=`<section class="sj-inspection-dialog sj-quote-dialog" role="dialog" aria-modal="true" aria-label="Cenová ponuka"><header class="sj-inspection-head"><div><small>CENOVÁ PONUKA · ${esc(job.job_number)}</small><h2>${esc(car(job.vehicle_id))}</h2><p>${esc(name(job.customer_id))}</p></div><button class="btn outline" id="sqClose">Zavrieť</button></header><div id="sqContent">Načítavam CP z MariaDB…</div></section>`;
+ document.body.append(overlay);
+ overlay.querySelector('#sqClose').onclick=()=>overlay.remove();
  const content=overlay.querySelector('#sqContent');
+ const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+ const company=job.work_order_mode==='company';
+ const renderForm=(item={})=>{
+  const old=content.querySelector('#sqInlineForm');if(old)old.remove();
+  const wrap=document.createElement('div');wrap.id='sqInlineForm';wrap.className='sj-quote-editor';
+  wrap.innerHTML=`<h3>${item.id?'Upraviť položku':'Pridať položku do CP'}</h3><form id="sqItemForm" class="sj-form"><div class="sj-fields sj-two"><label class="sj-field"><span>Typ položky</span><select name="item_type"><option value="labor" ${item.item_type==='labor'?'selected':''}>Práca</option><option value="part" ${item.item_type==='part'?'selected':''}>Náhradný diel</option></select></label><label class="sj-field"><span>Množstvo</span><input name="quantity" type="number" min="0.001" step="0.001" value="${esc(item.quantity??1)}" required></label></div><label class="sj-field"><span>Popis</span><input name="description" maxlength="500" value="${esc(item.description||'')}" required></label><div class="sj-fields sj-two"><label class="sj-field"><span>Jednotka</span><input name="unit" maxlength="20" value="${esc(item.unit||'ks')}"></label><label class="sj-field"><span>${company?'Cena bez DPH / MJ':'Cena / MJ'} (€)</span><input name="sale_unit_net" type="number" min="0" step="0.0001" value="${esc(item.sale_unit_net??0)}" required></label></div>${company?`<div class="sj-fields sj-two"><label class="sj-field"><span>DPH (%)</span><input name="vat_rate" type="number" min="0" max="100" step="0.001" value="${esc(item.vat_rate??23)}"></label><label class="sj-field"><span>Cena s DPH / MJ (€)</span><input name="sale_unit_gross" type="number" min="0" step="0.01"></label></div>`:'<input name="vat_rate" type="hidden" value="0">'}<label class="sj-field"><span>Nákupná cena bez DPH / MJ (interná)</span><input name="purchase_unit_net" type="number" min="0" step="0.0001" value="${esc(item.purchase_unit_net??'')}"></label><p id="sqFormError" role="alert"></p><div class="sj-actions"><button type="button" class="btn outline" id="sqCancelEdit">Zrušiť</button><button type="submit" class="btn">Uložiť položku</button></div></form>`;
+  content.append(wrap);
+  wrap.querySelector('#sqCancelEdit').onclick=()=>wrap.remove();
+  const form=wrap.querySelector('form');
+  if(company){const net=form.elements.sale_unit_net,gross=form.elements.sale_unit_gross,vat=form.elements.vat_rate;
+   const factor=()=>1+Number(vat.value||0)/100;
+   const update=()=>gross.value=(Number(net.value||0)*factor()).toFixed(2);
+   net.oninput=update;vat.oninput=update;gross.oninput=()=>net.value=(Number(gross.value||0)/factor()).toFixed(4);update();
+  }
+  form.onsubmit=async e=>{
+   e.preventDefault();const btn=form.querySelector('[type=submit]');btn.disabled=true;
+   const b=Object.fromEntries(new FormData(form).entries());delete b.sale_unit_gross;b.section='quote';
+   for(const k of ['quantity','sale_unit_net','vat_rate'])b[k]=Number(b[k]);
+   b.purchase_unit_net=b.purchase_unit_net===''?null:Number(b.purchase_unit_net);
+   try{await api().request('job_items&job_id='+encodeURIComponent(job.id)+(item.id?'&id='+encodeURIComponent(item.id):''),item.id?'PUT':'POST',b);
+    await refresh();if(location.hash==='#quotes')renderQuotes();
+   }catch(ex){wrap.querySelector('#sqFormError').textContent=ex.message;btn.disabled=false}
+  };
+  wrap.scrollIntoView({behavior:'smooth',block:'nearest'});
+ };
  async function refresh(){
   try{
    const r=await api().request('job_items&job_id='+encodeURIComponent(job.id));
    const items=(r.items||[]).filter(i=>i.section==='quote');
-   const company=job.work_order_mode==='company';
-   const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
-   const sum=items.reduce((v,i)=>v+Number(i.quantity)*Number(i.sale_unit_net),0);
-   content.innerHTML=`<p>Táto cenová ponuka patrí k vozidlu a číslu <strong>${esc(job.job_number)}</strong>. Uložené položky sa načítavajú z MariaDB.</p><div class="tablewrap"><table><thead><tr><th>Typ</th><th>Popis</th><th>Množstvo</th><th>Cena / MJ ${company?'bez DPH':''}</th><th>Spolu</th><th></th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.item_type==='part'?'Diel':'Práca'}</td><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td>${money(i.sale_unit_net)}</td><td>${money(Number(i.quantity)*Number(i.sale_unit_net))}</td><td><button class="btn outline small" data-qi="${i.id}">Upraviť</button></td></tr>`).join('')}</tbody></table></div><p><strong>Spolu ${company?'bez DPH':''}: ${money(sum)}</strong></p><div class="row wrap" style="gap:10px"><button class="btn" id="sqAdd">+ Pridať položku CP</button><button class="btn outline" id="sqPdf">Tlačiť CP / PDF</button></div><p class="muted">Schválenie alebo zamietnutie CP ešte nie je implementované. Položky sa týmto formulárom neprenášajú do zákazkového listu.</p>`;
-   content.querySelector('#sqAdd').onclick=()=>itemForm(job,{section:'quote'},async()=>{await refresh();if(location.hash==='#quotes')renderQuotes()});
-   content.querySelectorAll('[data-qi]').forEach(b=>b.onclick=()=>itemForm(job,items.find(i=>String(i.id)===b.dataset.qi),async()=>{await refresh();if(location.hash==='#quotes')renderQuotes()}));
+   const group=(type,title)=>`<h3>${title}</h3><div class="tablewrap"><table><thead><tr><th>Popis</th><th>Množstvo</th><th>${company?'Bez DPH / MJ':'Cena / MJ'}</th>${company?'<th>S DPH / MJ</th>':''}<th>Spolu</th><th></th></tr></thead><tbody>${items.filter(i=>i.item_type===type).map(i=>`<tr><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td>${money(i.sale_unit_net)}</td>${company?`<td>${money(Number(i.sale_unit_net)*(1+Number(i.vat_rate)/100))}</td>`:''}<td>${money(Number(i.quantity)*Number(i.sale_unit_net))}</td><td><button class="btn outline small" data-qi="${esc(i.id)}">Upraviť</button></td></tr>`).join('')||'<tr><td colspan="6">Zatiaľ bez položiek</td></tr>'}</tbody></table></div>`;
+   const net=items.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0);
+   const gross=items.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net)*(1+Number(i.vat_rate)/100),0);
+   content.innerHTML=`<p>CP k zákazke <strong>${esc(job.job_number)}</strong> · ${company?'Firma – bez DPH / s DPH':'FO – jedna cena'}</p>${group('labor','01 NAVRHOVANÉ PRÁCE')}${group('part','02 NAVRHOVANÉ DIELY A MATERIÁL')}<div class="sj-quote-totals"><strong>${company?'Spolu bez DPH':'Celkom'}: ${money(net)}</strong>${company?`<strong>DPH: ${money(gross-net)}</strong><strong>Spolu s DPH: ${money(gross)}</strong>`:''}</div><div class="sj-actions"><button class="btn" id="sqAdd">+ Pridať položku</button><button class="btn outline" id="sqPdf">Cenová ponuka · PDF</button></div>`;
+   content.querySelector('#sqAdd').onclick=()=>renderForm({item_type:'labor'});
+   content.querySelectorAll('[data-qi]').forEach(b=>b.onclick=()=>renderForm(items.find(i=>String(i.id)===b.dataset.qi)));
    content.querySelector('#sqPdf').onclick=()=>printDocument(job,items,'quote');
   }catch(e){content.innerHTML='<p role="alert">Nepodarilo sa načítať CP: '+esc(e.message)+'</p>'}
  }
@@ -123,7 +150,27 @@ function edit(j={}){
 }
 
 
+function printQuotePdf(job,items){
+ const customer=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
+ const vehicle=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
+ const company=job.work_order_mode==='company';
+ const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+ const lines=items.filter(i=>i.section==='quote');
+ const net=lines.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0);
+ const gross=lines.reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net)*(1+Number(i.vat_rate||0)/100),0);
+ const rows=type=>lines.filter(i=>i.item_type===type).map(i=>`<tr><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td class="right">${money(i.sale_unit_net)}</td>${company?`<td class="right">${money(Number(i.sale_unit_net)*(1+Number(i.vat_rate||0)/100))}</td>`:''}<td class="right">${money(Number(i.quantity)*Number(i.sale_unit_net))}</td></tr>`).join('')||`<tr><td colspan="${company?5:4}" class="empty">Bez položiek</td></tr>`;
+ const table=(title,type)=>`<h2>${title}</h2><table><thead><tr><th>Popis</th><th>Množstvo</th><th class="right">${company?'Cena bez DPH':'Cena'}</th>${company?'<th class="right">Cena s DPH</th>':''}<th class="right">Spolu</th></tr></thead><tbody>${rows(type)}</tbody></table>`;
+ const html=`<!doctype html><html lang="sk"><head><meta charset="utf-8"><title>CP ${esc(job.job_number)}</title><style>
+ @page{size:A4;margin:16mm}*{box-sizing:border-box}body{font:12px Arial,Helvetica,sans-serif;color:#15243b;margin:0}header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #155e9b;padding-bottom:16px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.brand img{width:62px;height:62px;object-fit:contain}.brand strong{font-size:22px;letter-spacing:.6px}.muted{color:#65758b}h1{font-size:22px;margin:0}h2{font-size:13px;margin:22px 0 8px;padding:7px 10px;background:#eaf2f8;color:#164d79;break-after:avoid}.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px}.panel{border:1px solid #d6e0e8;padding:12px;border-radius:6px;line-height:1.65;min-height:98px}table{border-collapse:collapse;width:100%;font-size:11px}th{background:#edf3f8;text-align:left;color:#31455c}td,th{border-bottom:1px solid #dce5ec;padding:8px 6px}tr{break-inside:avoid}.right{text-align:right}.empty{color:#8b99a9}.totals{margin:20px 0 0 auto;width:270px}.totals div{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #e0e6eb}.totals .grand{font-size:15px;font-weight:700;border-top:2px solid #155e9b}.terms{margin-top:26px;padding:10px;background:#f5f8fb;line-height:1.55}.sign{display:flex;gap:28px;margin-top:38px}.sign div{flex:1;border-top:1px solid #64748b;padding-top:7px}footer{margin-top:32px;border-top:1px solid #cbd5e1;padding-top:8px;font-size:10px;color:#64748b}@media print{button{display:none}}
+ </style></head><body><header><div class="brand"><img src="${new URL('/assets/logo.png',location.href).href}" alt=""><div><strong>AUTOSERVIS TOMI</strong><div class="muted">Cenová ponuka · ${company?'Firma':'FO'}</div></div></div><div style="text-align:right"><h1>CENOVÁ PONUKA</h1><div>Číslo: <b>${esc(job.job_number)}</b></div><div>Dátum: ${new Date().toLocaleDateString('sk-SK')}</div></div></header><div class="meta"><div class="panel"><b>ZÁKAZNÍK</b><div>${esc(customer.name||'—')}</div><div>${esc(customer.address||'')}</div><div>${esc(customer.phone||'')}</div></div><div class="panel"><b>VOZIDLO</b><div>${esc(vehicle.make||'')} ${esc(vehicle.model||'')}</div><div>EČV: ${esc(vehicle.plate||'—')} · VIN: ${esc(vehicle.vin||'—')}</div><div>Stav km: ${esc(job.intake_mileage_km||'—')}</div></div></div>${table('01 NAVRHOVANÉ PRÁCE','labor')}${table('02 NAVRHOVANÉ DIELY A MATERIÁL','part')}<h2>03 REKAPITULÁCIA CENOVEJ PONUKY</h2><div class="totals"><div><span>Práca ${company?'bez DPH':''}</span><b>${money(lines.filter(i=>i.item_type==='labor').reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0))}</b></div><div><span>Diely ${company?'bez DPH':''}</span><b>${money(lines.filter(i=>i.item_type==='part').reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0))}</b></div>${company?`<div><span>DPH</span><b>${money(gross-net)}</b></div>`:''}<div class="grand"><span>CELKOM ${company?'S DPH':''}</span><b>${money(company?gross:net)}</b></div></div><h2>04 ROZSAH A PODMIENKY</h2><div class="terms">Rozsah ponuky: ${esc(job.customer_request||job.repair_description||'Podľa uvedených položiek.')}<p>Dodatočné práce sa vykonajú až po odsúhlasení zákazníkom.</p><p>Rozhodnutie zákazníka: □ Schvaľujem &nbsp;&nbsp; □ Neschvaľujem</p></div><div class="sign"><div>Za servis · dátum / podpis</div><div>Zákazník · dátum / podpis</div></div><footer>AUTOSERVIS TOMI · AC7-SK, s.r.o. · Žilina</footer></body></html>`;
+ const w=window.open('','_blank');if(!w){alert('Povoľ vyskakovacie okná pre tlač PDF.');return}
+ w.document.open();w.document.write(html);w.document.close();w.focus();
+ const logo=w.document.querySelector('.brand img');let printed=false;const go=()=>{if(!printed){printed=true;w.print()}};
+ if(logo&& !logo.complete){logo.onload=go;logo.onerror=go;setTimeout(go,1500)}else setTimeout(go,350);
+}
 function printDocument(job,items,kind){
+ if(kind==='quote')return printQuotePdf(job,items);
+
  const customer=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
  const vehicle=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
  const titles={quote:'CENOVÁ PONUKA',work_order:'ZÁKAZKOVÝ LIST',intake:'PRIJÍMACÍ PROTOKOL',handover:'ODOVZDÁVACÍ PROTOKOL'};

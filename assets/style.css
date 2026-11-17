@@ -154,3 +154,11 @@
 @media(max-width:650px){.sj-inspection-dialog{padding:15px;max-height:96vh}.sj-inspection-head{flex-wrap:wrap}.sj-extra-button{margin:10px 0 0;width:100%}}
 
 .sj-quote-dialog{width:min(1050px,96vw)!important;max-width:1050px!important;max-height:92vh;overflow:auto}.sj-quote-dialog #sqContent{padding:20px}.sj-quote-dialog .tablewrap{overflow-x:auto}.sj-quote-dialog table{min-width:620px;width:100%}.sj-quote-dialog td,.sj-quote-dialog th{padding:10px;text-align:left}@media(max-width:700px){.sj-quote-dialog{width:100%!important;max-height:96vh}.sj-quote-dialog #sqContent{padding:12px}}
+
+/* CP: inline editor stays inside the quote window */
+.sj-quote-dialog{width:min(1060px,96vw)!important;max-height:92vh!important;overflow:auto!important}
+.sj-quote-editor{margin:20px 0 8px;padding:20px;border:2px solid #cbddeb;border-radius:12px;background:#f7fafc;color:#182c40}
+.sj-quote-editor h3{margin:0 0 14px;font-size:19px}
+.sj-quote-editor .sj-field span{font-weight:650}
+.sj-quote-totals{display:flex;gap:18px;justify-content:flex-end;flex-wrap:wrap;padding:15px;background:#eaf2f8;border-radius:8px;margin-top:15px}
+@media(max-width:650px){.sj-quote-dialog{width:100vw!important;max-height:100dvh!important}.sj-quote-editor{padding:12px}.sj-quote-totals{flex-direction:column;gap:5px}}
