@@ -164,7 +164,45 @@ function edit(j={}){
 }
 
 
+
+/* Dynamic documents reconstructed from the approved A4 PDF reference layouts.
+   Reference originals are kept in /pdf-vzory for visual comparison. */
+function printTemplateDocument(job,items,kind){
+ const c=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
+ const v=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
+ const company=job.work_order_mode==='company';
+ const isQuote=kind==='quote',isOrder=kind==='work_order',isMechanic=kind==='mechanic';
+ const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+ const val=x=>esc(x||'—');
+ const lines=items.filter(i=>i.section===(isQuote?'quote':'work_order'));
+ const labor=lines.filter(i=>i.item_type==='labor'),parts=lines.filter(i=>i.item_type==='part');
+ const sum=arr=>arr.reduce((a,i)=>a+Number(i.quantity||0)*Number(i.sale_unit_net||0),0);
+ const vat=arr=>arr.reduce((a,i)=>a+Number(i.quantity||0)*Number(i.sale_unit_net||0)*Number(i.vat_rate||0)/100,0);
+ const label=(title,value)=>`<div class="field"><small>${title}</small><strong>${val(value)}</strong></div>`;
+ const title=kind==='quote'?'CENOVÁ PONUKA':kind==='work_order'?'ZÁKAZKOVÝ LIST':kind==='mechanic'?'ZÁKAZKOVÝ LIST – TECHNIK':'PRIJÍMACÍ A ODOVZDÁVACÍ PROTOKOL';
+ const subtitle=isQuote||isOrder?`Dokument pre zákazníka · ${company?'Firemná verzia':'Jednoduchá verzia'}`:isMechanic?'Interný pracovný dokument · bez cien':'Príjem a odovzdanie vozidla';
+ const section=(number,text)=>`<h2><span>${number}</span> ${text}</h2>`;
+ const table=(arr,type)=>{
+  if(isMechanic){const head=type==='labor'?'<th>Vykonaný úkon</th><th>Od</th><th>Do</th><th>Trvanie (min)</th>':'<th>Diel / materiál</th><th>MJ</th><th>Množstvo</th><th>Použitý?</th>';
+   return `<table><thead><tr>${head}</tr></thead><tbody>${arr.map(i=>type==='labor'?`<tr><td>${val(i.description)}</td><td>________</td><td>________</td><td>________</td></tr>`:`<tr><td>${val(i.description)}</td><td>${val(i.unit)}</td><td>${val(i.quantity)}</td><td>□ Áno &nbsp; □ Nie</td></tr>`).join('')||'<tr><td colspan="4" class="blank">&nbsp;</td></tr>'}</tbody></table>`;
+  }
+  return `<table><thead><tr><th>${type==='labor'?'Úkon / služba':'Diel / materiál'}</th><th>MJ / počet</th><th class="right">${company?'Cena bez DPH':'Cena'}</th>${company?'<th class="right">Cena s DPH</th>':''}</tr></thead><tbody>${arr.map(i=>`<tr><td>${val(i.description)}</td><td>${val(i.quantity)} ${val(i.unit)}</td><td class="right">${money(Number(i.quantity)*Number(i.sale_unit_net))}</td>${company?`<td class="right">${money(Number(i.quantity)*Number(i.sale_unit_net)*(1+Number(i.vat_rate||0)/100))}</td>`:''}</tr>`).join('')||`<tr><td colspan="${company?4:3}" class="blank">&nbsp;</td></tr>`}</tbody></table>`;
+ };
+ const meta=`<div class="fields">${label(isQuote?'Číslo cenovej ponuky':'Číslo zákazkového listu',job.job_number)}${label('Dátum',new Date().toLocaleDateString('sk-SK'))}${label('Zákazník',c.name)}${label('EČV',v.plate)}${label('Vozidlo',`${v.make||''} ${v.model||''}`)}${label('VIN',v.vin)}${label('Stav km',job.intake_mileage_km)}${label(isQuote?'Platnosť ponuky':'Číslo CP',isQuote?'—':job.job_number)}</div>`;
+ const totals=`${section('03',isQuote?'REKAPITULÁCIA CENOVEJ PONUKY':'REKAPITULÁCIA')}<div class="totals"><div><span>${isQuote?'Cena práce':'Práca'} ${company?'bez DPH':''}</span><b>${money(sum(labor))}</b></div><div><span>${isQuote?'Cena dielov':'Diely'} ${company?'bez DPH':''}</span><b>${money(sum(parts))}</b></div>${company?`<div><span>DPH spolu</span><b>${money(vat(lines))}</b></div>`:''}<div class="grand"><span>CELKOM ${company?'S DPH':''}</span><b>${money(sum(lines)+(company?vat(lines):0))}</b></div></div>`;
+ const body=isQuote?`${meta}${section('01','NAVRHOVANÉ PRÁCE')}${table(labor,'labor')}${section('02','NAVRHOVANÉ DIELY A MATERIÁL')}${table(parts,'part')}${totals}${section('04','ROZSAH A PODMIENKY PONUKY')}<div class="lined">${val(job.customer_request||job.repair_description)}</div><p>Schválenie zákazníkom: □ Schvaľujem &nbsp; □ Neschvaľujem</p><div class="sign"><span>Dátum: __________________</span><span>Podpis / potvrdenie: __________________</span></div>`:
+ isOrder?`${meta}${section('01','VYKONANÉ PRÁCE')}${table(labor,'labor')}${section('02','POUŽITÉ DIELY A MATERIÁL')}${table(parts,'part')}${totals}${section('04','NEVYKONANÉ PRÁCE / ODPORÚČANIA')}<div class="lined">${val(job.repair_description||'')}</div>`:
+ isMechanic?`${meta}${section('01','VYKONANÉ PRÁCE')}${table(labor,'labor')}<p class="hint">Čas sa doplní automaticky zo začiatku a konca práce alebo ručne.</p>${section('02','POUŽITÉ DIELY A MATERIÁL')}${table(parts,'part')}${section('03','NEVYKONANÉ PRÁCE / ODPORÚČANIA')}<div class="lined"></div><div class="lined"></div>`:
+ `${section('01','VOZIDLO A ZÁKAZNÍK – PREDVYPLNENÉ ZO ZÁKAZKY')}<div class="fields">${label('Zákazník / spoločnosť',c.name)}${label('Kontakt',c.phone||c.email)}${label('Vozidlo (značka, model, motorizácia)',`${v.make||''} ${v.model||''}`)}${label('EČV',v.plate)}${label('VIN',v.vin)}${label('Číslo zákazkového listu',job.job_number)}</div>${section('02','PRÍJEM VOZIDLA')}<div class="fields">${label('Dátum a čas príjmu',job.received_at)}${label('Stav tachometra (km)',job.intake_mileage_km)}${label('Počet kľúčov','________')}</div><p>Palivo: &nbsp; □ Rezerva &nbsp; □ 1/4 &nbsp; □ 1/2 &nbsp; □ 3/4 &nbsp; □ Plná</p><p>Odovzdaná výbava: &nbsp; □ Doklady &nbsp; □ Servisná knižka &nbsp; □ Rezerva / sada</p><p>Vizuálny stav: &nbsp; □ Bez viditeľných poškodení &nbsp; □ Poškodenia zaznamenané / foto</p><div class="lined">Existujúce poškodenia / poznámka k stavu:</div><p>Skúšobná jazda po oprave: &nbsp; □ POVOĽUJEM &nbsp; □ NEPOVOĽUJEM</p><p class="hint">Zákazník rozhoduje o povolení jazdy na vozidle na účely testovania po oprave.</p>${section('03','POTVRDENIE PRÍJMU')}<p>Zákazník a servis potvrdzujú zaznamenaný stav vozidla pri prevzatí.</p><div class="sign"><span>Za servis – meno / podpis __________________</span><span>Zákazník – meno / podpis __________________</span></div>${section('04','ODOVZDANIE VOZIDLA')}<div class="fields">${label('Dátum a čas odovzdania','________')}${label('Stav tachometra (km)','________')}${label('Odovzdané kľúče','________')}</div><div class="lined">Stav vozidla pri odovzdaní / výhrady zákazníka:</div><p>Zákazník potvrdzuje prevzatie vozidla a odovzdaných kľúčov / dokladov.</p><div class="sign"><span>Za servis – meno / podpis __________________</span><span>Zákazník – meno / podpis __________________</span></div>`;
+ const html=`<!doctype html><html lang="sk"><head><meta charset="utf-8"><title>${title} · ${val(job.job_number)}</title><style>@page{size:A4;margin:14mm 16mm}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#18273c;margin:0}header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;min-height:76px}.logo{width:215px;max-height:75px;object-fit:contain;object-position:left top}.company{text-align:right;line-height:1.5;font-size:10px;color:#31455c}.doc-title{display:flex;align-items:center;justify-content:space-between;margin:12px 0 15px;border-bottom:2px solid #164e85;padding-bottom:8px}h1{font-size:19px;color:#122e52;margin:0}.subtitle{font-size:10px;color:#64748b;margin-top:5px}h2{font-size:12px;color:#fff;background:#15578e;padding:7px 9px;margin:18px 0 9px;break-after:avoid}h2 span{color:#f0d8dc;margin-right:6px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:9px 20px}.field{min-height:35px;border-bottom:1px solid #b7c7d7;padding:2px 0 6px}.field small{display:block;color:#61768c;font-size:9px;margin-bottom:5px}.field strong{font-size:11px;font-weight:600}table{width:100%;border-collapse:collapse;table-layout:auto;font-size:10px}th{text-align:left;background:#eaf2f9;color:#17436b}th,td{padding:8px 7px;border-bottom:1px solid #cad7e3}tr{break-inside:avoid}.right{text-align:right;white-space:nowrap}.blank{height:34px}.totals{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}.totals>div{display:flex;justify-content:space-between;border-bottom:1px solid #c7d6e4;padding:6px 2px}.totals .grand{color:#114879;font-size:13px;font-weight:bold;border-bottom:2px solid #15578e}.lined{border-bottom:1px solid #aebfd0;min-height:36px;padding:8px 2px}.sign{display:flex;justify-content:space-between;gap:20px;margin:22px 0 12px}.sign span{flex:1;font-size:10px}.hint{font-size:9px;color:#63758a}footer{margin-top:24px;border-top:1px solid #9bb3ca;padding-top:8px;font-size:9px;color:#63758a}p{line-height:1.5} @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}h2{background:#15578e!important;color:#fff!important}}</style></head><body><header><img class="logo" src="${new URL('/assets/logo.png',location.href).href}" alt="AUTOSERVIS TOMI"><div class="company"><b>AC7-SK, s.r.o.</b><br>M. R. Štefánika 3560/109, 010 01 Žilina<br>IČO: 44 221 134 | DIČ: 2022625979<br>IČ DPH: SK2022625979</div></header><div class="doc-title"><div><h1>${title}</h1><div class="subtitle">${subtitle}</div></div><b>${val(job.job_number)}</b></div>${body}<footer>AUTOSERVIS TOMI | AC7-SK, s.r.o. | Dokument vygenerovaný zo zákazky</footer></body></html>`;
+ const w=window.open('','_blank');if(!w){alert('Povoľ vyskakovacie okná pre tlač dokumentu.');return}
+ w.document.open();w.document.write(html);w.document.close();w.focus();
+ const logo=w.document.querySelector('.logo');let done=false;const print=()=>{if(!done){done=true;w.print()}};
+ if(logo&&!logo.complete){logo.onload=print;logo.onerror=print;setTimeout(print,1800)}else setTimeout(print,350);
+}
+
 function printQuotePdf(job,items){
+ return printTemplateDocument(job,items,'quote');
  const customer=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
  const vehicle=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
  const company=job.work_order_mode==='company';
@@ -183,6 +221,7 @@ function printQuotePdf(job,items){
  if(logo&& !logo.complete){logo.onload=go;logo.onerror=go;setTimeout(go,1500)}else setTimeout(go,350);
 }
 function printMechanicPdf(job,items){
+ return printTemplateDocument(job,items,'mechanic');
  const v=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
  const c=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
  const rows=items.filter(i=>i.section==='work_order');
@@ -190,7 +229,7 @@ function printMechanicPdf(job,items){
  const w=window.open('','_blank');if(!w){alert('Povoľ vyskakovacie okná pre PDF');return}w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),350);
 }
 function printDocument(job,items,kind){
- if(kind==='quote')return printQuotePdf(job,items);
+ return printTemplateDocument(job,items,kind);
 
  const customer=data.customers.find(x=>String(x.id)===String(job.customer_id))||{};
  const vehicle=data.vehicles.find(x=>String(x.id)===String(job.vehicle_id))||{};
