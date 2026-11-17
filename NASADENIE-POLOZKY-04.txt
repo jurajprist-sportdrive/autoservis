@@ -1,0 +1,7 @@
+AUTOSERVIS TOMI – položky zákaziek 04
+1. Zálohujte API index.php a GitHub projekt.
+2. WEBsupport-API/index.php nahrajte do autoservistomi.sk/sub/api/.
+3. Obsah GITHUB nahrajte do koreňa repozitára.
+4. Po prihlásení otvorte zákazku, pridajte testovací diel/prácu, obnovte a overte uloženie.
+5. Poznámky sa ukladajú do job_notes. Položky do job_items.
+6. Dôležité: PDF, dokumenty a pokladňa ešte nie sú napojené na server; nezadávajte ostré dáta.
