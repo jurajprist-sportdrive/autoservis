@@ -118,6 +118,26 @@ async function openQuote(job){
    content.innerHTML=`<p>CP k zákazke <strong>${esc(job.job_number)}</strong> · ${company?'Firma – bez DPH / s DPH':'FO – jedna cena'}</p>${group('labor','01 NAVRHOVANÉ PRÁCE')}${group('part','02 NAVRHOVANÉ DIELY A MATERIÁL')}<div class="sj-quote-totals"><strong>${company?'Spolu bez DPH':'Celkom'}: ${money(net)}</strong>${company?`<strong>DPH: ${money(gross-net)}</strong><strong>Spolu s DPH: ${money(gross)}</strong>`:''}</div><div class="sj-actions"><button class="btn" id="sqAdd" ${decision!=='pending'?'disabled':''}>+ Pridať položku</button><button class="btn outline" id="sqPdf">Cenová ponuka · PDF</button></div><div class="sj-quote-decision"><strong>Stav CP: ${decision==='approved'?'SCHVÁLENÁ':decision==='rejected'?'ZAMIETNUTÁ':'ČAKÁ NA SCHVÁLENIE'}</strong>${decision==='pending'?'<div class="sj-actions"><button class="btn" id="sqApprove">✓ SCHVÁLIŤ CP</button><button class="btn outline" id="sqReject">✕ ZAMIETNUŤ CP</button></div>':decision==='approved'?'<button class="btn outline small" id="sqUndo" title="Zrušiť schválenie CP">✕ Zrušiť schválenie</button>':''}</div>`;
    content.querySelector('#sqAdd').onclick=()=>renderForm({item_type:'labor'});
    content.querySelectorAll('[data-qi]').forEach(b=>b.onclick=()=>renderForm(items.find(i=>String(i.id)===b.dataset.qi)));
+   // Interný kontrolný zoznam z obhliadky; neprenáša sa do PDF ani do nacenených položiek.
+   const internal=document.createElement('section');internal.className='sj-internal-findings';
+   content.append(internal);
+   const drawFindings=async()=>{
+    try{
+     const response=await api().request('inspection_findings&job_id='+encodeURIComponent(job.id));
+     const findings=response.items||[];
+     const approved=findings.filter(f=>f.review_status==='approved');
+     const processed=approved.filter(f=>String(f.review_note||'').startsWith('[CP-HOTOVO]'));
+     internal.innerHTML=`<h3>Zistenia z obhliadky – iba interne</h3><p class="muted">Zaškrtnutie znamená spracované v CP. Nevytvorí diel ani prácu. Táto sekcia nie je súčasťou PDF.</p><p><strong>Spracované: ${processed.length} / ${approved.length}</strong></p>${findings.map(f=>`<div class="sj-internal-finding ${f.review_status==='rejected'?'rejected':String(f.review_note||'').startsWith('[CP-HOTOVO]')?'done':''}">${f.review_status==='approved'?`<label><input type="checkbox" data-finding-check="${esc(f.id)}" ${String(f.review_note||'').startsWith('[CP-HOTOVO]')?'checked':''}> <strong>${esc(f.description)}</strong></label>`:`<strong>${esc(f.description)}</strong> <span>${f.review_status==='rejected'?'Zamietnuté':'Nerozhodnuté'}</span>`}<small>${esc(({minor:'Ľahká',major:'Vážna',critical:'Kritická'})[f.severity]||f.severity)}${f.review_note&&!String(f.review_note).startsWith('[CP-HOTOVO]')?' · '+esc(f.review_note):''}</small></div>`).join('')||'<p>Zatiaľ bez zistení z obhliadky.</p>'}`;
+     internal.querySelectorAll('[data-finding-check]').forEach(input=>input.onchange=async()=>{
+      const f=findings.find(x=>String(x.id)===input.dataset.findingCheck);
+      if(!f)return;
+      input.disabled=true;
+      try{await api().request('inspection_findings&job_id='+encodeURIComponent(job.id)+'&id='+encodeURIComponent(f.id),'PUT',{status:'approved',review_note:input.checked?'[CP-HOTOVO]'+String(f.review_note||'').replace(/^\[CP-HOTOVO\]/,''):String(f.review_note||'').replace(/^\[CP-HOTOVO\]/,'')});await drawFindings()}
+      catch(e){alert('Nepodarilo sa uložiť kontrolu do MariaDB: '+e.message);await drawFindings()}
+     });
+    }catch(e){internal.innerHTML='<p role="alert">Zistenia sa nepodarilo načítať: '+esc(e.message)+'</p>'}
+   };
+   await drawFindings();
    content.querySelector('#sqPdf').onclick=()=>printDocument(job,items,'quote');
    const undo=content.querySelector('#sqUndo');if(undo)undo.onclick=async()=>{if(!confirm('Zrušiť schválenie CP a vrátiť ju do stavu Čaká na schválenie? Už prenesené položky v zákazkovom liste zostanú zachované.'))return;undo.disabled=true;try{await api().request('quote_decision&job_id='+encodeURIComponent(job.id),'POST',{status:'pending'});await refresh();if(location.hash==='#quotes')renderQuotes();}catch(e){alert('Nepodarilo sa zrušiť schválenie: '+e.message);undo.disabled=false}};
    for(const [id,status] of [['sqApprove','approved'],['sqReject','rejected']]){

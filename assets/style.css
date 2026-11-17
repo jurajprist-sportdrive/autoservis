@@ -262,3 +262,12 @@
 .cash-summary-panel{gap:12px}
 .cash-summary-panel .cash-summary-line{margin-right:auto;min-width:0}
 @media(max-width:650px){.cash-summary-new{min-width:100px;font-size:11px;padding:8px}.cash-summary-panel{gap:6px}.cash-balance-summary{padding-left:8px}}
+
+/* Interné zistenia obhliadky v CP, verzia 40 */
+.sj-internal-findings{margin-top:24px;padding:18px;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;color:#17233b}
+.sj-internal-finding{padding:12px;margin:8px 0;background:white;border:1px solid #e2e8f0;border-radius:9px}
+.sj-internal-finding small{display:block;margin-top:4px;color:#64748b}
+.sj-internal-finding.done{background:#dcfce7;border-color:#86efac}
+.sj-internal-finding.rejected{background:#fee2e2;border-color:#fca5a5}
+.sj-internal-finding input{width:18px;height:18px;vertical-align:middle}
+.sj-internal-label{color:#15803d;font-size:12px;font-weight:700}
