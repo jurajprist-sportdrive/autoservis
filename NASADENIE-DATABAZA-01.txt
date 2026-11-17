@@ -1,0 +1,4 @@
+Nahrajte obsah ZIP do koreňa GitHub repozitára. Najprv zálohujte existujúci projekt.
+Modul Zákazníci a vozidlá sa načítava z API Websupport.
+Ostatné moduly, vrátane Zákaziek a Kasy, zostávajú DEMO a používajú localStorage.
+Pred ostrou prevádzkou otestujte pridanie a úpravu záznamov a prístup z iného zariadenia.
