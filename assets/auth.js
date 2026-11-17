@@ -9,11 +9,11 @@
   app.hidden=true;
   function showLogin(message=''){
     app.hidden=true;root.hidden=false;
-    root.innerHTML=`<div class="auth-panel"><h1>AUTOSERVIS TOMI</h1><p>Prihlásenie do interného systému</p><form id="authForm"><label for="authUser">Používateľské meno</label><input id="authUser" autocomplete="username" required maxlength="100"><label for="authPass">Heslo</label><input id="authPass" type="password" autocomplete="current-password" required><label for="authMode">Spôsob prihlásenia</label><select id="authMode"><option value="login">Heslo</option><option value="login_pin">PIN</option></select><p id="authError" role="alert">${message.replace(/[&<>"']/g,'')}</p><button class="btn" type="submit">Prihlásiť sa</button></form></div>`;
-    document.getElementById('authMode').addEventListener('change',e=>{document.querySelector('label[for=authPass]').textContent=e.target.value==='login_pin'?'PIN (6–8 číslic)':'Heslo';});document.getElementById('authForm').addEventListener('submit',async e=>{
+    root.innerHTML=`<div class="auth-panel"><h1>AUTOSERVIS TOMI</h1><p>Prihlásenie PIN kódom</p><form id="authForm"><label for="authPin">Štvormiestny PIN</label><input id="authPin" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" required autofocus><p id="authError" role="alert">${message.replace(/[&<>"']/g,'')}</p><button class="btn" type="submit">Prihlásiť sa</button></form></div>`;
+    document.getElementById('authForm').addEventListener('submit',async e=>{
       e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;
       try{
-        const mode=document.getElementById('authMode').value;const result=await request(mode,'POST',{username:document.getElementById('authUser').value,...(mode==='login_pin'?{pin:document.getElementById('authPass').value}:{password:document.getElementById('authPass').value})},false);
+        const result=await request('login_pin','POST',{pin:document.getElementById('authPin').value},false);
         if(!result.token||!result.user)throw Error('Neplatná odpoveď servera');
         token=result.token;sessionStorage.setItem('tomi_api_token',token);start(result.user);
       }catch(err){document.getElementById('authError').textContent=err.message||'Prihlásenie zlyhalo';btn.disabled=false;}
@@ -36,7 +36,7 @@
     if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
     const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='TEST 43: Dashboard, plánovací kalendár, história práce a správa používateľov načítavajú údaje z MariaDB. Ostatné moduly ešte môžu používať lokálne údaje. Pred ostrou prevádzkou vykonajte testy.';
     document.querySelector('.workspace').prepend(warning);
-    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-auth-gate','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=20261117-41','/assets/server-mechanic.js?v=20261117-08','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=43-1'];
+    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-auth-gate','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=20261117-41','/assets/server-mechanic.js?v=20261117-08','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=44-1'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
   async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}
