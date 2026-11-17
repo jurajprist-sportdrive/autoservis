@@ -26,6 +26,27 @@ function renderServer(){
 }
 
 
+async function openQuote(job){
+ if(!job)return;
+ const overlay=document.createElement('div');overlay.className='sj-inspection-overlay';
+ overlay.innerHTML=`<section class="sj-inspection-dialog sj-quote-dialog" role="dialog" aria-modal="true" aria-label="Cenová ponuka"><header class="sj-inspection-head"><div><small>CENOVÁ PONUKA · ${esc(job.job_number)}</small><h2>${esc(car(job.vehicle_id))}</h2><p>${esc(name(job.customer_id))}</p></div><button class="btn outline" id="sqClose">Zavrieť</button></header><div id="sqContent">Načítavam CP z databázy…</div></section>`;
+ document.body.append(overlay);overlay.querySelector('#sqClose').onclick=()=>overlay.remove();overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+ const content=overlay.querySelector('#sqContent');
+ async function refresh(){
+  try{
+   const r=await api().request('job_items&job_id='+encodeURIComponent(job.id));
+   const items=(r.items||[]).filter(i=>i.section==='quote');
+   const company=job.work_order_mode==='company';
+   const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+   const sum=items.reduce((v,i)=>v+Number(i.quantity)*Number(i.sale_unit_net),0);
+   content.innerHTML=`<p>Táto cenová ponuka patrí k vozidlu a číslu <strong>${esc(job.job_number)}</strong>. Uložené položky sa načítavajú z MariaDB.</p><div class="tablewrap"><table><thead><tr><th>Typ</th><th>Popis</th><th>Množstvo</th><th>Cena / MJ ${company?'bez DPH':''}</th><th>Spolu</th><th></th></tr></thead><tbody>${items.map(i=>`<tr><td>${i.item_type==='part'?'Diel':'Práca'}</td><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td>${money(i.sale_unit_net)}</td><td>${money(Number(i.quantity)*Number(i.sale_unit_net))}</td><td><button class="btn outline small" data-qi="${i.id}">Upraviť</button></td></tr>`).join('')}</tbody></table></div><p><strong>Spolu ${company?'bez DPH':''}: ${money(sum)}</strong></p><div class="row wrap" style="gap:10px"><button class="btn" id="sqAdd">+ Pridať položku CP</button><button class="btn outline" id="sqPdf">Tlačiť CP / PDF</button></div><p class="muted">Schválenie alebo zamietnutie CP ešte nie je implementované. Položky sa týmto formulárom neprenášajú do zákazkového listu.</p>`;
+   content.querySelector('#sqAdd').onclick=()=>itemForm(job,{section:'quote'},async()=>{await refresh();if(location.hash==='#quotes')renderQuotes()});
+   content.querySelectorAll('[data-qi]').forEach(b=>b.onclick=()=>itemForm(job,items.find(i=>String(i.id)===b.dataset.qi),async()=>{await refresh();if(location.hash==='#quotes')renderQuotes()}));
+   content.querySelector('#sqPdf').onclick=()=>printDocument(job,items,'quote');
+  }catch(e){content.innerHTML='<p role="alert">Nepodarilo sa načítať CP: '+esc(e.message)+'</p>'}
+ }
+ await refresh();
+}
 async function renderQuotes(){
  if(location.hash!=='#quotes')return;
  const target=document.getElementById('app');if(!target)return;
@@ -41,7 +62,7 @@ async function renderQuotes(){
  const list=target.querySelector('#sqList');if(!list)return;
  const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
  list.innerHTML=`<div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Zákazník</th><th>Vozidlo</th><th>CP</th><th>Spolu</th><th></th></tr></thead><tbody>${records.map(({job:j,items,error})=>`<tr><td>${esc(j.job_number)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${error?`<span style="color:#b91c1c">${esc(error)}</span>`:items.length?'Rozpracovaná ('+items.length+' položiek)':'Bez položiek'}</td><td>${money(items.reduce((sum,i)=>sum+Number(i.quantity)*Number(i.sale_unit_net),0))}</td><td><button class="btn outline small" data-sq="${esc(j.id)}">Otvoriť CP</button></td></tr>`).join('')}</tbody></table></div>`;
- list.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>details(data.jobs.find(j=>String(j.id)===b.dataset.sq),'quote'));
+ list.querySelectorAll('[data-sq]').forEach(b=>b.onclick=()=>openQuote(data.jobs.find(j=>String(j.id)===b.dataset.sq)));
 }
 
 function renderIntake(){
@@ -52,7 +73,7 @@ function renderIntake(){
  target.querySelector('#siReload')?.addEventListener('click',load);
  target.querySelector('#siReceive')?.addEventListener('click',()=>edit());
  target.querySelectorAll('[data-open-inspection]').forEach(b=>b.onclick=()=>openInspection(data.jobs.find(j=>String(j.id)===b.dataset.openInspection)));
- target.querySelectorAll('[data-open-quote]').forEach(b=>b.onclick=()=>details(data.jobs.find(j=>String(j.id)===b.dataset.openQuote),'quote'));
+ target.querySelectorAll('[data-open-quote]').forEach(b=>b.onclick=()=>openQuote(data.jobs.find(j=>String(j.id)===b.dataset.openQuote)));
  target.querySelectorAll('[data-open-job]').forEach(b=>b.onclick=()=>details(data.jobs.find(j=>String(j.id)===b.dataset.openJob),'work_order'));
 }
 
@@ -71,7 +92,7 @@ async function openInspection(job){
    content.innerHTML=`<form id="siAdd" class="sj-inspection-form"><label>Popis závady<textarea name="description" required maxlength="3000" rows="3"></textarea></label><label>Závažnosť<select name="severity"><option value="minor">Drobná</option><option value="major">Vážna</option><option value="critical">Kritická</option></select></label><button class="btn" type="submit">+ Pridať závadu</button></form><h3>Zistené závady (${findings.length})</h3>${findings.map(f=>`<article class="sj-finding"><strong>${esc(f.description)}</strong><p>${esc(f.severity)} · ${esc(f.review_status)}</p>${reviewer?`<div class="row wrap" style="gap:8px"><button class="btn small" data-review="approved" data-id="${f.id}">Schváliť</button><button class="btn outline small" data-review="rejected" data-id="${f.id}">Zamietnuť</button></div>`:''}</article>`).join('')||'<p>Zatiaľ bez závad.</p>'}<div class="sj-inspection-footer"><button class="btn outline" id="siQuote">Otvoriť CP tohto vozidla</button></div>`;
    content.querySelector('#siAdd').onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;try{await api().request('inspection_findings&job_id='+job.id,'POST',{description:e.target.elements.description.value,severity:e.target.elements.severity.value});await refresh()}catch(ex){alert(ex.message);b.disabled=false}};
    content.querySelectorAll('[data-review]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await api().request('inspection_findings&job_id='+job.id+'&id='+b.dataset.id,'PUT',{status:b.dataset.review,review_note:''});await refresh()}catch(ex){alert(ex.message);b.disabled=false}});
-   content.querySelector('#siQuote').onclick=()=>{overlay.remove();details(job,'quote')};
+   content.querySelector('#siQuote').onclick=()=>{overlay.remove();openQuote(job)};
   }catch(ex){content.innerHTML='<p role="alert">Obhliadku sa nepodarilo načítať: '+esc(ex.message)+'</p>'}
  }
  await refresh();

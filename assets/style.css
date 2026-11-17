@@ -152,3 +152,5 @@
 .sj-onsite-control[data-state="onsite"]{background:#dcfce7!important;color:#166534!important}.sj-onsite-control[data-state="outside"]{background:#f1f5f9!important;color:#475569!important}
 .sj-cp-state{display:inline-block;background:#fef3c7;color:#92400e;border-radius:8px;padding:9px}.sj-extra-button{background:#15803d!important;color:white!important;margin-left:8px}.sj-focus{outline:2px solid #2563eb;outline-offset:4px}
 @media(max-width:650px){.sj-inspection-dialog{padding:15px;max-height:96vh}.sj-inspection-head{flex-wrap:wrap}.sj-extra-button{margin:10px 0 0;width:100%}}
+
+.sj-quote-dialog{width:min(1050px,96vw)!important;max-width:1050px!important;max-height:92vh;overflow:auto}.sj-quote-dialog #sqContent{padding:20px}.sj-quote-dialog .tablewrap{overflow-x:auto}.sj-quote-dialog table{min-width:620px;width:100%}.sj-quote-dialog td,.sj-quote-dialog th{padding:10px;text-align:left}@media(max-width:700px){.sj-quote-dialog{width:100%!important;max-height:96vh}.sj-quote-dialog #sqContent{padding:12px}}
