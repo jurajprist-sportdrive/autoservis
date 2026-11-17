@@ -271,3 +271,6 @@
 .sj-internal-finding.rejected{background:#fee2e2;border-color:#fca5a5}
 .sj-internal-finding input{width:18px;height:18px;vertical-align:middle}
 .sj-internal-label{color:#15803d;font-size:12px;font-weight:700}
+
+/* Workflow 41 */
+.wf41-overlay .sj-inspection-dialog{max-height:94vh;overflow:auto}.wf41-overlay .wf41-content{padding:20px;max-height:80vh;overflow:auto}.wf41-overlay form.stack{display:grid;gap:12px;margin:15px 0}.wf41-overlay form.stack label{display:grid;gap:5px}.wf41-overlay input,.wf41-overlay textarea,.wf41-overlay select{max-width:100%;width:100%;box-sizing:border-box}.wf41-overlay .sj-finding{padding:12px;border:1px solid #ddd;border-radius:8px;margin:8px 0}.wf41-overlay .row.wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.wf41-overlay .row.wrap label{display:inline-flex;gap:6px;align-items:center}
