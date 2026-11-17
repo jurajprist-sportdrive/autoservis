@@ -36,7 +36,7 @@
     if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
     const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='PRECHODNÁ VERZIA: Zákazníci, vozidlá, zákazky, položky a dokumenty zákaziek používajú server. Ostatné moduly môžu stále používať lokálne údaje. Pred ostrou prevádzkou treba dokončiť integráciu a testovanie.';
     document.querySelector('.workspace').prepend(warning);
-    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-auth-gate','/assets/server-customers.js?v=20261117-db01','/assets/server-jobs.js?v=20261117-db02','/assets/server-mechanic.js?v=20261117-08','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11'];
+    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-auth-gate','/assets/server-customers.js?v=20261117-db01','/assets/server-jobs.js?v=20261117-13','/assets/server-mechanic.js?v=20261117-08','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
   async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}
