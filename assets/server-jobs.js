@@ -22,7 +22,7 @@ function renderServer(){
  target.innerHTML=`<div class="pagehead"><div><h1>Servisné zákazky</h1><p>Zákazky v databáze Websupport – prvá fáza</p></div><div class="actions"><button class="btn outline" id="sjReload">Obnoviť</button><button class="btn" id="sjNew">+ Nová zákazka</button></div></div>${err?`<div class="card" style="color:#b91c1c">${esc(err)}. Lokálne zákazky sa z bezpečnostných dôvodov nezobrazujú.</div>`:''}${busy?'<div class="card">Načítavam…</div>':!ready?'<div class="card">Záznamy sa nepodarilo načítať.</div>':`<div class="card"><div class="tablewrap"><table><thead><tr><th>Číslo</th><th>Prijatie</th><th>Zákazník</th><th>Vozidlo</th><th>Stav</th><th></th></tr></thead><tbody>${data.jobs.map(j=>`<tr><td>${esc(j.job_number)}</td><td>${esc(j.received_at)}</td><td>${esc(name(j.customer_id))}</td><td>${esc(car(j.vehicle_id))}</td><td>${esc(j.status)}</td><td><button class="btn small outline" data-sj="${j.id}">Otvoriť</button></td></tr>`).join('')}</tbody></table>${!data.jobs.length?'<p>Žiadne zákazky v databáze.</p>':''}</div></div>`}`;
  target.querySelector('#sjReload')?.addEventListener('click',load);
  target.querySelector('#sjNew')?.addEventListener('click',()=>edit());
- target.querySelectorAll('[data-sj]').forEach(b=>b.addEventListener('click',()=>edit(data.jobs.find(x=>String(x.id)===b.dataset.sj))));
+ target.querySelectorAll('[data-sj]').forEach(b=>b.addEventListener('click',()=>details(data.jobs.find(x=>String(x.id)===b.dataset.sj))));
 }
 function edit(j={}){
  if(!ready){alert('Najprv sa musia načítať údaje z databázy.');return}
@@ -48,6 +48,30 @@ function edit(j={}){
   catch(ex){overlay.querySelector('#sjError').textContent=ex.message;btn.disabled=false}
  };
 }
+
+async function details(job){
+ const target=document.getElementById('app');if(!target)return;
+ target.innerHTML='<div class="card">Načítavam položky a poznámky zákazky…</div>';
+ let items=[],notes=[];
+ try{const [a,b]=await Promise.all([api().request('job_items&job_id='+job.id),api().request('job_notes&job_id='+job.id)]);items=a.items||[];notes=b.items||[];}
+ catch(e){target.innerHTML='<div class="card">Chyba načítania: '+esc(e.message)+'</div>';return}
+ const sectionName=s=>s==='quote'?'Cenová ponuka':'Zákazkový list';
+ const money=n=>Number(n||0).toLocaleString('sk-SK',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+ const total=section=>items.filter(i=>i.section===section).reduce((a,i)=>a+Number(i.quantity)*Number(i.sale_unit_net),0);
+ target.innerHTML=`<div class="pagehead"><div><button class="btn outline" id="sjBack">← Zákazky</button><h1>${esc(job.job_number)} – ${esc(name(job.customer_id))}</h1><p>${esc(car(job.vehicle_id))}</p></div><button class="btn outline" id="sjEdit">Upraviť zákazku</button></div><div class="card"><h3>Položky zákazky – uložené v databáze</h3>${['quote','work_order'].map(section=>`<h3>${sectionName(section)}</h3><div class="tablewrap"><table><thead><tr><th>Typ</th><th>Popis</th><th>Množstvo</th><th>Predaj bez DPH / MJ</th><th>Spolu bez DPH</th><th></th></tr></thead><tbody>${items.filter(i=>i.section===section).map(i=>`<tr><td>${i.item_type==='part'?'Diel':'Práca'}</td><td>${esc(i.description)}</td><td>${esc(i.quantity)} ${esc(i.unit)}</td><td>${money(i.sale_unit_net)}</td><td>${money(Number(i.quantity)*Number(i.sale_unit_net))}</td><td><button class="btn outline small" data-item="${i.id}">Upraviť</button></td></tr>`).join('')}</tbody></table></div><p><strong>Spolu bez DPH: ${money(total(section))}</strong></p><button class="btn outline" data-add="${section}">+ Pridať položku</button>`).join('')}</div><div class="card"><h3>Poznámky</h3>${notes.map(n=>`<p>${esc(n.body)} <small>${esc(n.created_at)}</small></p>`).join('')}<form id="sjNote"><textarea name="body" required placeholder="Nová poznámka"></textarea><button class="btn" type="submit">Uložiť poznámku</button></form></div><p class="muted">PDF dokumenty a práce navyše zatiaľ nie sú prepojené s databázovým detailom zákazky.</p>`;
+ target.querySelector('#sjBack').onclick=()=>{location.hash='#jobs';load()};
+ target.querySelector('#sjEdit').onclick=()=>edit(job);
+ target.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>itemForm(job,{section:b.dataset.add},details));
+ target.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>itemForm(job,items.find(i=>String(i.id)===b.dataset.item),details));
+ target.querySelector('#sjNote').onsubmit=async e=>{e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;try{await api().request('job_notes&job_id='+job.id,'POST',{body:e.target.elements.body.value,note_type:'general'});details(job)}catch(ex){alert(ex.message);btn.disabled=false}};
+}
+function itemForm(job,item,back){
+ const overlay=document.createElement('div');overlay.style.cssText='position:fixed;inset:0;z-index:10000;background:#0009;display:grid;place-items:center;padding:16px';
+ overlay.innerHTML=`<div class="card" style="background:white;color:#17233b;width:min(600px,100%);max-height:90vh;overflow:auto"><h3>${item.id?'Upraviť':'Pridať'} položku</h3><form id="sjItem"><label>Sekcia<select name="section"><option value="quote" ${item.section==='quote'?'selected':''}>Cenová ponuka</option><option value="work_order" ${item.section==='work_order'?'selected':''}>Zákazkový list</option></select></label><label>Typ<select name="item_type"><option value="part" ${item.item_type==='part'?'selected':''}>Diel</option><option value="labor" ${item.item_type==='labor'?'selected':''}>Práca</option></select></label><label>Popis<input name="description" required maxlength="500" value="${esc(item.description)}"></label><label>Množstvo<input name="quantity" required type="number" step="0.001" min="0.001" value="${esc(item.quantity||1)}"></label><label>Jednotka<input name="unit" maxlength="20" value="${esc(item.unit||'ks')}"></label><label>Predajná cena bez DPH / MJ<input name="sale_unit_net" type="number" min="0" step="0.0001" value="${esc(item.sale_unit_net||0)}"></label><label>Nákupná cena bez DPH / MJ<input name="purchase_unit_net" type="number" min="0" step="0.0001" value="${esc(item.purchase_unit_net??'')}"></label><label>DPH %<input name="vat_rate" type="number" min="0" max="100" step="0.001" value="${esc(item.vat_rate??23)}"></label><p id="sjItemError" style="color:#b91c1c"></p><button class="btn" type="submit">Uložiť</button><button class="btn outline" id="sjItemCancel" type="button">Zrušiť</button></form></div>`;
+ document.body.append(overlay);overlay.querySelector('#sjItemCancel').onclick=()=>overlay.remove();
+ overlay.querySelector('form').onsubmit=async e=>{e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;const b=Object.fromEntries(new FormData(e.target).entries());for(const k of ['quantity','sale_unit_net','vat_rate'])b[k]=Number(b[k]);b.purchase_unit_net=b.purchase_unit_net===''?null:Number(b.purchase_unit_net);try{await api().request('job_items&job_id='+job.id+(item.id?'&id='+item.id:''),item.id?'PUT':'POST',b);overlay.remove();back(job)}catch(ex){overlay.querySelector('#sjItemError').textContent=ex.message;btn.disabled=false}};
+}
+
 window.jobs=()=>'<div class="card">Načítavam zákazky z Websupportu…</div>';
 window.newJob=()=>edit();
 window.addEventListener('hashchange',()=>{if(location.hash==='#jobs')setTimeout(load,0)});
