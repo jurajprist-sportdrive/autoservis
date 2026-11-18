@@ -36,14 +36,14 @@
     if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
     const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='TEST 43: Dashboard, plánovací kalendár, história práce a správa používateľov načítavajú údaje z MariaDB. Ostatné moduly ešte môžu používať lokálne údaje. Pred ostrou prevádzkou vykonajte testy.';
     document.querySelector('.workspace').prepend(warning);
-    // TEST 71: replace earlier admin design layers with the F1 race-control theme.
-    ['tomi-modal66-css','tomi-design67-css','tomi-design68-css','tomi-design69-css','tomi-design70-css'].forEach(id=>document.getElementById(id)?.remove());
-    if(!document.getElementById('tomi-design71-css')){
-      const link=document.createElement('link');link.id='tomi-design71-css';link.rel='stylesheet';
-      link.href='/assets/design71.css?v=71-1';document.head.appendChild(link);
+    // TEST 72: replace older design CSS; only this unified theme is loaded.
+    ['tomi-modal66-css','tomi-design67-css','tomi-design68-css','tomi-design69-css','tomi-design70-css','tomi-design71-css'].forEach(id=>document.getElementById(id)?.remove());
+    if(!document.getElementById('tomi-design72-css')){
+      const link=document.createElement('link');link.id='tomi-design72-css';link.rel='stylesheet';
+      link.href='/assets/design72.css?v=72-1';document.head.appendChild(link);
     }
-    const design71=document.createElement('script');design71.src='/assets/design71.js?v=71-1';design71.async=false;
-    document.body.appendChild(design71);
+    const design72=document.createElement('script');design72.src='/assets/design72.js?v=72-1';design72.async=false;
+    document.body.appendChild(design72);
     const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=64-2','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=68-1','/assets/cash58.js?v=67'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }

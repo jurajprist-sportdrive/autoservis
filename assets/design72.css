@@ -1,0 +1,479 @@
+/* AUTOSERVIS TOMI — TEST 72 / ADMIN VISUAL SYSTEM
+   One stylesheet replaces the design-only layers from TEST 66–69.
+   Scoped to body.tomi-ui72: never changes the mobile mechanic route.
+   Pure presentation: no API, database, timers or workflow changes. */
+
+body.tomi-ui72 {
+  --t72-font: 'Inter','Segoe UI',Arial,sans-serif;
+  --t72-ink: #25364b;
+  --t72-muted: #708299;
+  --t72-navy: #142b48;
+  --t72-navy2: #213e61;
+  --t72-blue: #356fa8;
+  --t72-red: #c94b57;
+  --t72-bg: #dfe8f1;
+  --t72-surface: #fff;
+  --t72-soft: #f4f7fa;
+  --t72-line: #d7e0e9;
+  --t72-radius: 14px;
+  --navy: var(--t72-navy);
+  --blue: var(--t72-blue);
+  --red: var(--t72-red);
+  --bg: var(--t72-bg);
+  --muted: var(--t72-muted);
+  --line: var(--t72-line);
+  --radius: var(--t72-radius);
+  background:var(--t72-bg) !important;
+  color:var(--t72-ink);
+  font-family:var(--t72-font) !important;
+  font-size:13px;
+  line-height:1.5;
+}
+/* Enforce ONE font for dynamic and separately mounted modules. No typography bleed into #mechanic. */
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]),
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(button,input,textarea,select,table,th,td,label,small,span,p,div,strong,h1,h2,h3,h4) {
+  font-family:var(--t72-font) !important;
+  letter-spacing:normal;
+}
+body.tomi-ui72 .admin :is(h1,h2,h3,h4),
+body.tomi-ui72 :is(.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(h1,h2,h3,h4) {
+  letter-spacing:-.022em !important;
+  line-height:1.3;
+  font-weight:600 !important;
+}
+body.tomi-ui72 .admin strong,
+body.tomi-ui72 :is(.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) strong {font-weight:650 !important;}
+
+/* Application shell */
+body.tomi-ui72 .admin {background:var(--t72-bg);}
+body.tomi-ui72 .sidebar {
+  background:linear-gradient(180deg,#10243d,#152f4e 65%,#10223a) !important;
+  color:#d8e6f2 !important;
+  box-shadow:3px 0 20px #182f4926;
+  border-right:1px solid #0c2038;
+}
+body.tomi-ui72 .sidebar .brand {font-weight:650;letter-spacing:-.02em;color:#fff;padding-bottom:22px;}
+body.tomi-ui72 .sidebar .brandmark {background:var(--t72-red);border-radius:10px;box-shadow:none;}
+body.tomi-ui72 .sidebar .side-group {color:#94a9c0;font-size:10px;font-weight:600;letter-spacing:.09em;padding-top:20px;}
+body.tomi-ui72 .sidebar .navlink {color:#c9d9e9;font-size:12.5px;font-weight:500 !important;border-radius:9px;padding:10px 13px;transition:background .15s;}
+body.tomi-ui72 .sidebar .navlink:hover {background:#ffffff14;color:#fff;transform:none;}
+body.tomi-ui72 .sidebar .navlink.active,
+body.tomi-ui72 .sidebar .navlink[aria-current=page] {background:#284c72 !important;color:#fff !important;box-shadow:inset 3px 0 var(--t72-red) !important;}
+body.tomi-ui72 .sidebar .navicon {width:20px;font-size:15px;opacity:.85;}
+body.tomi-ui72 .workspace {background:linear-gradient(155deg,#e2eaf3 0%,#dce6ef 100%) !important;min-width:0;}
+body.tomi-ui72 .topbar {height:62px !important;padding:0 25px;background:#f7f9fc !important;border-bottom:1px solid var(--t72-line);box-shadow:0 2px 11px #19355308;}
+body.tomi-ui72 .topbar .muted {font-size:12px !important;font-weight:450;}
+body.tomi-ui72 .topbar .pill {background:#e7eff8;color:#325e89;font-weight:550;padding:6px 10px;}
+/* Remove the two giant top shortcuts; preserve access to attendance from the sidebar. */
+body.tomi-ui72 #attendanceLink,
+body.tomi-ui72 #inspectionLink {display:none !important;}
+body.tomi-ui72 .auth-warning {padding:7px 25px !important;background:#e9eff5 !important;color:#718399 !important;border-bottom:1px solid #d5e1eb;font-size:10.5px !important;font-weight:450 !important;line-height:1.5;}
+body.tomi-ui72 .main {padding:25px 28px 40px;max-width:1600px;font-size:13px;line-height:1.5;}
+body.tomi-ui72 #app {color:var(--t72-ink);font-size:13px;}
+body.tomi-ui72 #app .pagehead {margin-bottom:18px;gap:12px;}
+body.tomi-ui72 #app .pagehead h1,
+body.tomi-ui72 #app > .row:first-child :is(h1,h2) {font-size:23px !important;font-weight:600 !important;color:#193653 !important;margin:0 0 4px !important;}
+body.tomi-ui72 #app .pagehead p {font-size:12px !important;color:var(--t72-muted);line-height:1.45;}
+body.tomi-ui72 #app :is(.card,.panel,.stat,.tomi-job-head,.tomi-documents-bar,.tablewrap) {
+  background:#fdfefe !important;border:1px solid var(--t72-line) !important;
+  border-radius:var(--t72-radius) !important;box-shadow:0 4px 15px #193b5c09 !important;
+}
+body.tomi-ui72 #app .card {padding:18px !important;margin-bottom:14px;}
+body.tomi-ui72 #app .card > h3:first-child {margin-top:0 !important;}
+body.tomi-ui72 #app h2 {font-size:18px;font-weight:600;color:#213c5a;}
+body.tomi-ui72 #app h3 {font-size:15px;font-weight:600;color:#264362;}
+body.tomi-ui72 #app .metric {font-size:25px !important;font-weight:650 !important;letter-spacing:-.02em !important;margin:7px 0;}
+body.tomi-ui72 #app .eyebrow {letter-spacing:.05em;font-size:10px;font-weight:600;}
+body.tomi-ui72 #app .pill {font-size:11px;font-weight:600;}
+body.tomi-ui72 #app .tabs {gap:5px;}
+body.tomi-ui72 #app .tab {background:#f7fafc;color:#52708d;border:1px solid #d9e5ef;font-weight:550 !important;font-size:12px;border-radius:9px;padding:8px 12px;}
+body.tomi-ui72 #app .tab.active {background:var(--t72-navy2);border-color:var(--t72-navy2);color:#fff;}
+
+/* Common buttons and fields on ALL administrative pages. */
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn,
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(button.cash-pill,.cash-period-btn,.q68-primary) {
+  border-radius:9px !important;min-height:34px;padding:8px 13px;font-size:12.5px !important;
+  line-height:1.3;font-weight:550 !important;letter-spacing:0 !important;
+  box-shadow:none;transition:background-color .16s,border-color .16s,box-shadow .16s;
+}
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn:not(.outline):not(.red):not(.danger) {
+  background:var(--t72-blue) !important;border-color:var(--t72-blue) !important;color:#fff !important;
+}
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn.outline {
+  background:#f5f8fc !important;border:1px solid #c9d9e6 !important;color:#355b7e !important;
+}
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn.red,
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn.danger {background:var(--t72-red) !important;border-color:var(--t72-red) !important;color:#fff !important;}
+body.tomi-ui72 .btn.small {font-size:11.5px !important;padding:7px 10px !important;min-height:29px;}
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(label,.field label,.sj-field,.cash-form label) {
+  color:#536a83 !important;font-size:11.5px !important;font-weight:550 !important;
+  line-height:1.4;
+}
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea) {
+  font-size:13px !important;font-weight:450 !important;line-height:1.35;
+  background:#fff !important;color:#233d57 !important;border:1px solid #cddce9 !important;
+  border-radius:9px !important;box-shadow:none !important;
+  min-height:37px;max-width:100%;min-width:0;
+}
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(input,select,textarea):focus-visible {
+  outline:3px solid #3f81bd35 !important;outline-offset:1px;border-color:#5287b8 !important;
+}
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) textarea {min-height:78px;resize:vertical;}
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(input,select,textarea):disabled {background:#f2f5f8 !important;color:#8495a6 !important;}
+body.tomi-ui72 .admin .field {gap:5px;}
+body.tomi-ui72 .admin .grid {gap:13px;}
+body.tomi-ui72 .admin .stack {gap:13px;}
+body.tomi-ui72 #app .tablewrap {padding:0;overflow-x:auto;}
+body.tomi-ui72 #app table {width:100%;border-collapse:collapse;font-size:12.5px !important;}
+body.tomi-ui72 #app th {background:#eef3f8 !important;color:#61778c !important;font-size:11px !important;font-weight:600 !important;text-transform:none !important;letter-spacing:0 !important;padding:11px 12px;}
+body.tomi-ui72 #app td {background:transparent;font-size:12.5px !important;padding:11px 12px;border-color:#e8eef4;}
+body.tomi-ui72 #app tbody tr:hover {background:#f4f8fc;}
+body.tomi-ui72 #app .notice {background:#eaf2fa;color:#426283;font-size:12px;border-radius:10px;}
+
+/* One modal language for: standard, customers/vehicles, job edit, quote, inspection, expenses, tire hotel, cash. */
+body.tomi-ui72 :is(#modalroot .modalback,.sj-inspection-overlay,.t72-overlay) {
+  background:rgba(13,29,48,.58) !important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  padding:18px !important;overscroll-behavior:contain;
+}
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) {
+  background:#f9fbfd !important;color:var(--t72-ink) !important;
+  border:1px solid #becedc !important;border-radius:16px !important;
+  box-shadow:0 24px 74px #10284255 !important;
+  padding:0 !important;max-height:min(91dvh,920px) !important;
+  overflow:auto !important;overscroll-behavior:contain;
+  font-size:13px !important;line-height:1.5;
+}
+body.tomi-ui72 #modalroot .modal {width:min(750px,100%);}
+body.tomi-ui72 .sj-inspection-dialog {width:min(880px,100%) !important;}
+body.tomi-ui72 .sj-quote-dialog {width:min(1060px,96vw) !important;max-width:1060px !important;}
+body.tomi-ui72 .sj-dialog {width:min(710px,100%);}
+body.tomi-ui72 .t72-dialog {width:min(760px,100%) !important;}
+body.tomi-ui72 dialog[data-t72-dialog] {width:min(850px,95vw) !important;max-width:850px !important;margin:auto;}
+body.tomi-ui72 dialog[data-t72-dialog]::backdrop {background:rgba(13,29,48,.58);backdrop-filter:blur(3px);}
+body.tomi-ui72 :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head,.t72-modal-head) {
+  display:flex !important;align-items:center !important;justify-content:space-between !important;
+  gap:12px;background:linear-gradient(105deg,#1c3656,#25496d) !important;color:#fff !important;
+  padding:16px 21px !important;border:0 !important;border-bottom:1px solid #375776 !important;
+  margin:0 !important;border-radius:15px 15px 0 0 !important;
+  min-height:60px !important;
+}
+body.tomi-ui72 :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head,.t72-modal-head) :is(h2,strong) {
+  font-size:17px !important;color:#fff !important;font-weight:600 !important;letter-spacing:-.015em !important;margin:0 !important;line-height:1.35 !important;
+}
+body.tomi-ui72 :is(.sj-inspection-head,.sj-dialog-head) :is(p,small,.sj-kicker) {color:#d0dfeb !important;font-size:11.5px !important;font-weight:450 !important;margin:3px 0 0;}
+body.tomi-ui72 :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head,.t72-modal-head) :is(button,.close,.sj-close) {
+  background:#ffffff17 !important;color:#fff !important;border:1px solid #ffffff30 !important;
+  border-radius:8px !important;padding:6px 10px !important;min-height:32px;font-size:12px !important;
+  font-weight:500 !important;flex-shrink:0;box-shadow:none !important;
+}
+body.tomi-ui72 #modalroot .modal>.row:first-child .close {width:34px;height:34px;font-size:21px !important;padding:0 !important;}
+body.tomi-ui72 #modalroot .modal > :not(:first-child) {margin:0 20px 20px !important;}
+body.tomi-ui72 #modalroot .modal > :nth-child(2) {margin-top:20px !important;}
+body.tomi-ui72 #modalroot .modal :is(form,.grid,.stack) {color:var(--t72-ink);}
+body.tomi-ui72 #modalroot .modal .grid.two {grid-template-columns:repeat(2,minmax(0,1fr));}
+body.tomi-ui72 .sj-inspection-dialog > :is(#siContent,#obBody,#sqContent,.wf41-content,.sj-inspection-body) {padding:20px 22px 24px !important;margin:0 !important;}
+body.tomi-ui72 .sj-inspection-dialog > .wf41-content > h2.t72-source-title {display:none !important;}
+body.tomi-ui72 .sj-inspection-dialog > .wf41-content {max-height:none !important;overflow:visible !important;}
+body.tomi-ui72 .sj-inspection-form {display:grid;gap:13px;}
+body.tomi-ui72 .sj-inspection-form label {display:grid;gap:5px;}
+body.tomi-ui72 .sj-inspection-dialog .sj-finding {background:#fff;border:1px solid #e0e7ef;border-radius:10px;padding:12px;margin-bottom:10px;}
+body.tomi-ui72 .sj-dialog form.sj-form {padding:20px 22px 24px !important;gap:13px !important;}
+body.tomi-ui72 .sj-dialog .sj-dialog-head {padding:16px 21px !important;}
+body.tomi-ui72 .sj-dialog :is(.sj-field,.sj-field span) {font-size:11.5px !important;font-weight:550 !important;color:#536a83 !important;}
+body.tomi-ui72 .t72-dialog > form {padding:20px 22px 23px !important;margin:0 !important;}
+body.tomi-ui72 .t72-dialog > form.grid {gap:13px;}
+body.tomi-ui72 .t72-dialog > .row:first-child {margin:0 !important;}
+/* Native dialogs (pneu hotel, storage): header lives inside the form. */
+body.tomi-ui72 dialog[data-t72-dialog] > form {padding:20px 22px 23px !important;box-sizing:border-box;}
+body.tomi-ui72 dialog[data-t72-dialog] > form > .t72-modal-head {
+  margin:-20px -22px 18px !important;grid-column:1 / -1;
+}
+body.tomi-ui72 dialog[data-t72-dialog] > form .q68-two {gap:12px !important;}
+body.tomi-ui72 dialog[data-t72-dialog] h3 {font-size:14px !important;}
+body.tomi-ui72 .sj-inspection-dialog .t72-modal-head {margin:0 !important;}
+body.tomi-ui72 .sj-inspection-dialog .sj-form {padding:19px 21px 22px !important;gap:12px;}
+body.tomi-ui72 .sj-inspection-dialog > p {margin:15px 21px 0 !important;color:var(--t72-muted);}
+
+/* Inside modal: compact, friendly form controls and blue save buttons. */
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea) {padding:9px 11px !important;}
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(button[type=submit],.cash-submit,.q68-primary) {
+  background:var(--t72-blue) !important;color:#fff !important;border:1px solid var(--t72-blue) !important;
+  border-radius:9px !important;padding:10px 16px !important;min-height:39px;font-size:12.5px !important;
+  font-weight:600 !important;box-shadow:none !important;letter-spacing:0 !important;
+}
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(button[type=submit],.cash-submit,.q68-primary):hover {background:#255d91 !important;border-color:#255d91 !important;}
+/* Workflow overlay heading: eliminate the second competing label in the header. */
+body.tomi-ui72 .wf41-overlay .sj-inspection-head > strong {display:none !important;}
+/* Cash heading and balance follow the same type scale as every other page. */
+body.tomi-ui72 .cash-ui .cash-top h1 {font-size:23px !important;line-height:1.3;font-weight:600 !important;color:#193653 !important;}
+body.tomi-ui72 .cash-ui .cash-balance {font-size:25px !important;letter-spacing:-.025em;font-weight:650 !important;color:#193653 !important;}
+body.tomi-ui72 .cash-ui .cash-balance-label {font-size:11px !important;font-weight:550 !important;letter-spacing:0 !important;}
+body.tomi-ui72 .cash-ui .cash-tools {gap:6px;}
+body.tomi-ui72 .cash-ui .cash-pill {font-size:11.5px !important;font-weight:550 !important;min-height:31px;}
+/* Cash movement: soft choices until selected; labels/metadata are small. */
+body.tomi-ui72 #modalroot .modal .cash-form-v2 {display:grid;grid-template-columns:minmax(0,1fr) !important;gap:13px;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button {min-height:46px;font-size:13px !important;font-weight:550 !important;border-radius:10px !important;box-shadow:none !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit] {background:#e5f3e9 !important;color:#22714a !important;border:1px solid #c3e1cd !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal] {background:#fae9eb !important;color:#99505a !important;border:1px solid #edcbd0 !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit].selected {background:#179b60 !important;color:#fff !important;border-color:#179b60 !important;box-shadow:0 0 0 2px #179b6030 !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal].selected {background:#cf4655 !important;color:#fff !important;border-color:#cf4655 !important;box-shadow:0 0 0 2px #cf46552d !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta {display:grid;grid-column:1/-1;grid-template-columns:1.1fr 1.35fr .7fr;gap:9px;align-items:end;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta label {display:grid;gap:4px;min-width:0;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta input,
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta select {font-size:12px !important;padding:8px !important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-amount input {font-size:22px !important;font-weight:600 !important;min-height:47px;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-submit {width:100%;}
+
+/* Cash dashboard: balance + new button near each other; period selector right, 3 equally spaced totals. */
+body.tomi-ui72 .cash-ui .cash-overview {
+  display:grid !important;grid-template-columns:max-content max-content minmax(0,1fr) !important;
+  gap:clamp(11px,1.8vw,23px) !important;align-items:center;
+  background:#fdfefe !important;border:1px solid var(--t72-line) !important;border-radius:14px !important;
+  padding:17px 20px !important;box-shadow:0 4px 15px #193b5c0a !important;
+}
+body.tomi-ui72 .cash-ui .cash-new {background:#159762 !important;color:#fff !important;border-radius:9px !important;font-size:12.5px !important;font-weight:600 !important;padding:12px 16px !important;white-space:nowrap;}
+body.tomi-ui72 .cash-ui .cash-summary {border-left:1px solid #d9e5ee;padding-left:20px !important;min-width:0;}
+body.tomi-ui72 .cash-ui .cash-period-controls {display:flex;justify-content:flex-end;align-items:center;gap:9px;}
+body.tomi-ui72 .cash-ui .cash-period-controls > span {color:#6f8499;font-size:11px !important;font-weight:550 !important;letter-spacing:0;text-transform:none;}
+body.tomi-ui72 .cash-ui .cash-period-buttons {display:flex;gap:3px;padding:3px;background:#edf3f8;border:1px solid #d9e5ed;border-radius:10px;}
+body.tomi-ui72 .cash-ui .cash-period-btn {border:0 !important;background:transparent !important;color:#53718e !important;border-radius:7px !important;font-size:11.5px !important;font-weight:550 !important;padding:7px 10px !important;min-height:31px;}
+body.tomi-ui72 .cash-ui .cash-period-btn.is-active {background:var(--t72-navy2) !important;color:#fff !important;}
+body.tomi-ui72 .cash-ui .cash-summary-lines {display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px !important;margin-top:11px;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span {display:grid;gap:5px;min-width:0;background:#f3f7fb;border:1px solid #e2eaf2;border-radius:10px;padding:10px 12px;font-size:11px !important;color:#6d7f93;}
+body.tomi-ui72 .cash-ui .cash-summary-lines b {font-size:16px !important;font-weight:650 !important;letter-spacing:-.025em !important;color:#284b6c;white-space:nowrap;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span:first-child b {color:#18825b;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span:nth-child(2) b {color:#bd4a58;}
+body.tomi-ui72 .cash-ui .cash-tablecard {border-radius:14px !important;}
+body.tomi-ui72 .cash-ui .cash-filter-fields {gap:10px;}
+body.tomi-ui72 .cash-ui th {text-transform:none !important;}
+
+@media(max-width:1120px){
+  body.tomi-ui72 .cash-ui .cash-overview {grid-template-columns:max-content minmax(0,1fr) !important;}
+  body.tomi-ui72 .cash-ui .cash-summary {grid-column:1/-1;border-left:0;padding-left:0 !important;border-top:1px solid var(--t72-line);padding-top:12px;}
+}
+@media(max-width:760px){
+  body.tomi-ui72 .main {padding:14px;}
+  body.tomi-ui72 .topbar {padding:0 14px;height:auto !important;min-height:60px;}
+  body.tomi-ui72 .auth-warning {padding:7px 14px !important;}
+  body.tomi-ui72 :is(#modalroot .modalback,.sj-inspection-overlay,.t72-overlay) {padding:8px !important;}
+  body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) {max-width:97vw !important;max-height:95dvh !important;border-radius:12px !important;}
+  body.tomi-ui72 :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head,.t72-modal-head) {padding:13px 15px !important;border-radius:11px 11px 0 0 !important;}
+  body.tomi-ui72 #modalroot .modal > :not(:first-child) {margin-left:14px !important;margin-right:14px !important;}
+  body.tomi-ui72 .t72-dialog > form {padding:14px !important;}
+  body.tomi-ui72 :is(.sj-inspection-dialog > #siContent,.sj-inspection-dialog > #obBody,.sj-inspection-dialog > #sqContent,.sj-inspection-dialog > .wf41-content) {padding:14px !important;}
+  body.tomi-ui72 #modalroot .modal .grid.two {grid-template-columns:1fr;}
+  body.tomi-ui72 .cash-ui .cash-overview {grid-template-columns:1fr !important;}
+  body.tomi-ui72 .cash-ui .cash-new {justify-self:start;}
+  body.tomi-ui72 .cash-ui .cash-summary {grid-column:1;}
+  body.tomi-ui72 .cash-ui .cash-period-controls {flex-wrap:wrap;justify-content:flex-start;}
+  body.tomi-ui72 .cash-ui .cash-summary-lines {grid-template-columns:1fr;}
+  body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta {grid-template-columns:1fr 1fr;}
+  body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-meta label:last-child {grid-column:1/-1;}
+  body.tomi-ui72 dialog[data-t72-dialog] > form {padding:14px !important;}
+  body.tomi-ui72 dialog[data-t72-dialog] > form > .t72-modal-head {margin:-14px -14px 14px !important;}
+}
+@media(prefers-reduced-motion:reduce){body.tomi-ui72 * {transition-duration:.01ms !important;animation-duration:.01ms !important;}}
+
+
+/* ================================================================
+   TEST 72 — RED BULL RACING / GARAGE EDITION
+   One consistent admin UI. This is not an official affiliated product.
+   High-contrast nav & hero; light work surfaces and modal forms.
+   No selectors targeting the mechanic app, login or public website.
+   Images are original AI-generated local assets, not hotlinked photos.
+   ================================================================ */
+body.tomi-ui72 {
+  --t72-font: 'Inter','Segoe UI',Arial,sans-serif;
+  --t72-navy:#071a39;
+  --t72-navy2:#083375;
+  --t72-blue:#0757bd;
+  --t72-red:#df2538;
+  --t72-yellow:#ffd233;
+  --t72-bg:#0d2c5e;
+  --t72-ink:#20324b;
+  --t72-muted:#6c809a;
+  --t72-line:#d5e2f2;
+  --t72-soft:#f1f6fd;
+  --t72-radius:14px;
+  --navy:var(--t72-navy);
+  --blue:var(--t72-blue);
+  --red:var(--t72-red);
+  --bg:#edf3f9;
+  --muted:var(--t72-muted);
+  --line:var(--t72-line);
+  --radius:var(--t72-radius);
+  background:#0a2451 !important;
+}
+body.tomi-ui72 .admin {background:linear-gradient(140deg,#07204b,#0d3778 80%) !important;}
+body.tomi-ui72 .sidebar {
+  background:linear-gradient(180deg,#06152e 0%,#071c40 54%,#09275a 100%) !important;
+  border-right:1px solid rgba(255,210,51,.19) !important;
+  box-shadow:5px 0 28px rgba(0,0,0,.22);
+  scrollbar-color:#29548a #071b3b;
+}
+body.tomi-ui72 .sidebar::after {
+  content:'';display:block;min-height:95px;margin-top:18px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(7,25,54,.5),rgba(7,25,54,.05)),url('/assets/rb72-helmet.webp') center 48% / cover no-repeat;
+  border-radius:12px;border:1px solid rgba(255,210,51,.2);
+}
+body.tomi-ui72 .sidebar .brand{font-size:14px !important;gap:9px;padding-bottom:16px !important;letter-spacing:.015em !important;}
+body.tomi-ui72 .sidebar .brandmark {
+  background:linear-gradient(135deg,#f42e42,#a71122) !important;
+  box-shadow:0 0 0 2px rgba(255,210,51,.32) !important;
+  border-radius:9px !important;
+}
+body.tomi-ui72 .sidebar .side-group {color:#83a7d3;font-weight:600 !important;letter-spacing:.09em !important;}
+body.tomi-ui72 .sidebar .navlink{color:#c3d4ec !important;font-weight:500 !important;}
+body.tomi-ui72 .sidebar .navlink:hover{background:rgba(47,119,212,.25) !important;color:#fff !important;}
+body.tomi-ui72 .sidebar .navlink.active,
+body.tomi-ui72 .sidebar .navlink[aria-current=page] {
+  background:linear-gradient(90deg,#164f9e,#0b3572) !important;
+  color:#fff !important;
+  box-shadow:inset 3px 0 var(--t72-yellow), 0 4px 15px rgba(2,8,25,.15) !important;
+}
+body.tomi-ui72 .workspace {
+  background:
+    radial-gradient(900px 550px at 97% 0%,rgba(31,103,190,.50),transparent 60%),
+    radial-gradient(750px 500px at 10% 100%,rgba(5,19,52,.65),transparent 70%),
+    linear-gradient(150deg,#103b7a 0%,#0b2956 42%,#061a38 100%) !important;
+  min-width:0;
+}
+body.tomi-ui72 .topbar {
+  background:linear-gradient(90deg,rgba(3,16,42,.88),rgba(9,43,95,.89)) !important;
+  border-bottom:1px solid rgba(255,255,255,.10) !important;
+  box-shadow:0 2px 20px rgba(0,0,0,.12);
+  position:relative;
+}
+body.tomi-ui72 .topbar::after {
+  content:'';height:2px;position:absolute;bottom:-1px;left:0;right:0;pointer-events:none;
+  background:linear-gradient(90deg,#d92034 0%,#d92034 14%,#ffc929 14%,#ffc929 23%,rgba(255,255,255,.06) 23%);
+}
+body.tomi-ui72 .topbar :is(.muted,#crumb){color:#dbe8fa !important;font-weight:500 !important;}
+body.tomi-ui72 .topbar .pill {background:rgba(255,255,255,.13) !important;color:#fff !important;border:1px solid rgba(255,255,255,.12);}
+body.tomi-ui72 .topbar .btn.outline{background:rgba(255,255,255,.09)!important;color:#fff!important;border-color:rgba(255,255,255,.24)!important;}
+body.tomi-ui72 .topbar .btn.outline:hover{background:rgba(255,255,255,.17)!important;}
+body.tomi-ui72 .auth-warning{background:rgba(6,23,52,.8)!important;color:#8da8c8!important;border-bottom-color:rgba(255,255,255,.07)!important;}
+body.tomi-ui72 .main{padding-top:19px;position:relative;isolation:isolate;}
+body.tomi-ui72 #app .pagehead{
+  padding:18px 21px !important;min-height:96px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.13);
+  background:linear-gradient(92deg,#092651 0%,rgba(10,48,105,.96) 65%,rgba(10,35,75,.72) 100%),url('/assets/rb72-helmet.webp') right 45% / 300px auto no-repeat !important;
+  box-shadow:0 10px 26px rgba(0,0,0,.1);
+  position:relative;overflow:hidden;
+}
+body.tomi-ui72 #app .pagehead:before {
+  content:'';position:absolute;left:0;top:0;height:3px;width:100%;pointer-events:none;
+  background:linear-gradient(90deg,#e72137 0 18%,#ffd233 18% 26%,rgba(255,255,255,.12) 26% 100%);
+}
+body.tomi-ui72 #app .pagehead h1,
+body.tomi-ui72 #app > .row:first-child :is(h1,h2),
+body.tomi-ui72 #app .pagehead h2 {color:#fff !important;font-size:21px !important;font-weight:620 !important;letter-spacing:-.02em !important;}
+body.tomi-ui72 #app .pagehead p {color:#b8d3f5 !important;}
+body.tomi-ui72 #app .pagehead .btn:not(.outline):not(.red):not(.danger){background:#0c63d1 !important;border-color:#3084eb !important;}
+body.tomi-ui72 #app .pagehead .btn.outline{background:rgba(255,255,255,.10) !important;color:#f0f6ff !important;border-color:rgba(255,255,255,.28) !important;}
+body.tomi-ui72 #app :is(.card,.panel,.stat,.tomi-job-head,.tomi-documents-bar,.tablewrap){
+  background:#fbfdff !important;border:1px solid #dce7f5 !important;
+  box-shadow:0 13px 33px rgba(0,15,51,.18) !important;
+}
+body.tomi-ui72 #app .card{position:relative;}
+body.tomi-ui72 #app .card:before {
+  content:'';position:absolute;top:0;left:15px;width:62px;height:3px;border-radius:0 0 4px 4px;
+  background:linear-gradient(90deg,#db2537 0 62%,#ffd232 62% 100%);
+}
+body.tomi-ui72 #app .metric{color:#092e6a!important;font-weight:650!important;}
+body.tomi-ui72 #app :is(h2,h3){color:#193d71;font-weight:600!important;}
+body.tomi-ui72 #app .pill{font-weight:600!important;}
+body.tomi-ui72 #app .tabs .tab.active{background:linear-gradient(130deg,#0757bd,#083e8e)!important;border-color:#0d5dc3!important;color:#fff!important;}
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn:not(.outline):not(.red):not(.danger){
+  background:linear-gradient(135deg,#1265ce,#0b489c) !important;border-color:#1160c6!important;color:#fff!important;
+}
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn.red,
+body.tomi-ui72 :is(.admin,.modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) .btn.danger {background:linear-gradient(135deg,#ee3548,#ba1b32)!important;border-color:#d52339!important;color:#fff!important;}
+body.tomi-ui72 #app th {background:#eaf2fc!important;color:#54718f!important;}
+body.tomi-ui72 #app td {color:#1e3959;}
+body.tomi-ui72 #app .tablewrap{overflow-x:auto;}
+body.tomi-ui72 #app tbody tr:hover{background:#f2f7fd;}
+/* Unified dialogs. Brand-colored title bar, neutral body, white controls. */
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]){
+  background:#f7faff !important;border:1px solid #aec6e5!important;
+  box-shadow:0 36px 95px rgba(0,7,29,.48)!important;color:#1c3553!important;
+}
+body.tomi-ui72 :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head,.t72-modal-head) {
+  background:
+    linear-gradient(90deg,#e4293d 0 12%,#ffd233 12% 18%,rgba(255,255,255,.08) 18% 100%) top/100% 3px no-repeat,
+    linear-gradient(98deg,#061a3a,#0a438f 75%,#0757af) !important;
+  border-bottom:1px solid rgba(255,215,61,.32)!important;
+  box-shadow:none !important;
+}
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(h1,h2,h3){letter-spacing:-.01em!important;}
+body.tomi-ui72 :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.t72-dialog,dialog[data-t72-dialog]) :is(button[type=submit],.cash-submit,.q68-primary){
+  background:linear-gradient(135deg,#0f64cd,#084492)!important;border-color:#0b59ba!important;color:#fff!important;
+}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit].selected {background:#159e66!important;}
+body.tomi-ui72 #modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal].selected {background:#d73d4b!important;}
+/* Cash: keep green actions distinct and the period selector at the far right. */
+body.tomi-ui72 .cash-ui .cash-top h1 {color:#f5f9ff !important;font-size:21px!important;}
+body.tomi-ui72 .cash-ui .cash-overview {
+  background:#f9fcff!important;border-color:#d9e8f8!important;
+  box-shadow:0 12px 31px rgba(0,15,51,.18)!important;position:relative;overflow:hidden;
+}
+body.tomi-ui72 .cash-ui .cash-overview:before {
+  content:'';height:3px;position:absolute;left:0;right:0;top:0;
+  background:linear-gradient(90deg,#e42339 0 22%,#ffd233 22% 28%,#1266d2 28% 100%);
+}
+body.tomi-ui72 .cash-ui .cash-new {background:#159865!important;color:#fff!important;}
+body.tomi-ui72 .cash-ui .cash-period-btn.is-active {background:#0d4da2!important;color:#fff!important;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span {background:#f0f5fc;border-color:#dbe6f5;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span:before{
+  content:'';width:26px;height:2px;border-radius:2px;background:#0b64d3;display:block;margin-bottom:1px;
+}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span:first-child:before{background:#13a16c;}
+body.tomi-ui72 .cash-ui .cash-summary-lines > span:nth-child(2):before{background:#df2538;}
+/* RACING wallpaper: original photo-like AI scene, only on dashboard. */
+body.tomi-ui72 #app .rb72-hero {
+  min-height:217px;position:relative;overflow:hidden;isolation:isolate;
+  border-radius:16px;border:1px solid rgba(255,255,255,.24);
+  background:
+    linear-gradient(90deg,rgba(3,15,39,.98) 0%,rgba(4,22,54,.95) 29%,rgba(3,19,47,.53) 54%,rgba(5,17,40,.07) 85%),
+    url('/assets/rb72-car.webp') right 54% / cover no-repeat !important;
+  box-shadow:0 18px 48px rgba(0,5,24,.35);margin-bottom:18px;
+}
+body.tomi-ui72 #app .rb72-hero:before {
+ content:'';display:block;position:absolute;top:0;left:0;right:0;height:4px;z-index:2;
+ background:linear-gradient(90deg,#e2253a 0 15%,#fbd332 15% 20%,#0a5ac3 20% 100%);
+}
+body.tomi-ui72 #app .rb72-hero-content{position:relative;z-index:2;padding:25px 28px;max-width:580px;color:#f7faff;}
+body.tomi-ui72 #app .rb72-kicker{display:flex;align-items:center;gap:9px;font-size:10.5px;color:#ffe05a;letter-spacing:.15em;font-weight:650;}
+body.tomi-ui72 #app .rb72-kicker:before{content:'';display:inline-block;width:22px;height:3px;background:#e32c41;border-radius:3px;}
+body.tomi-ui72 #app .rb72-hero-title{margin:10px 0 8px!important;color:#fff!important;font-size:clamp(25px,3vw,39px)!important;letter-spacing:-.035em!important;line-height:1.08!important;font-weight:700!important;}
+body.tomi-ui72 #app .rb72-hero-title span{color:#ffdc36;}
+body.tomi-ui72 #app .rb72-hero-description{margin:0;color:#c5d8ef;font-size:12px;max-width:430px;line-height:1.6;}
+body.tomi-ui72 #app .rb72-hero-footer{margin-top:19px;display:flex;gap:12px;flex-wrap:wrap;}
+body.tomi-ui72 #app .rb72-tag{padding:6px 9px;border:1px solid rgba(255,255,255,.19);border-radius:6px;font-size:10px;color:#e3efff;background:rgba(8,44,104,.4);letter-spacing:.07em;}
+body.tomi-ui72 #app .rb72-team-wordmark{position:absolute;right:24px;top:18px;z-index:2;text-align:right;font-style:italic;font-weight:800;font-size:12px;line-height:1.1;color:#fff;text-shadow:0 2px 12px #001b4a;letter-spacing:.06em;}
+body.tomi-ui72 #app .rb72-team-wordmark span{color:#ffd233;}
+body.tomi-ui72 #app .rb72-hero-outlines{position:absolute;right:0;bottom:0;left:0;height:2px;background:linear-gradient(90deg,rgba(229,33,55,.85),rgba(255,208,49,.7),transparent);}
+/* Consistent focus visibility, avoid a cosmetic-only edit that hurts keyboard navigation. */
+body.tomi-ui72 :is(.admin,#modalroot,.sj-inspection-overlay,.t72-overlay,dialog[data-t72-dialog]) :is(input,select,textarea,button):focus-visible {
+ outline:3px solid rgba(255,210,51,.57)!important;outline-offset:2px!important;
+}
+@media (max-width:980px){
+ body.tomi-ui72 #app .rb72-hero{background-position:right center;min-height:205px;}
+ body.tomi-ui72 #app .rb72-team-wordmark{display:none;}
+}
+@media (max-width:760px){
+ body.tomi-ui72 .sidebar::after{display:none;}
+ body.tomi-ui72 #app .pagehead{padding:15px!important;min-height:76px;}
+ body.tomi-ui72 #app .pagehead h1{font-size:18px!important;}
+ body.tomi-ui72 #app .rb72-hero{min-height:200px;background-position:65% center!important;}
+ body.tomi-ui72 #app .rb72-hero-content{padding:20px;max-width:100%;background:linear-gradient(90deg,rgba(4,16,38,.7),transparent);}
+ body.tomi-ui72 #app .rb72-hero-title{font-size:27px!important;}
+ body.tomi-ui72 #app .rb72-hero-description{font-size:11px;max-width:260px;}
+ body.tomi-ui72 #app .rb72-hero-footer{display:none;}
+ body.tomi-ui72 .topbar{padding:0 14px;}
+}
+@media(prefers-reduced-motion: reduce){
+ body.tomi-ui72 *,body.tomi-ui72 *::before,body.tomi-ui72 *::after{scroll-behavior:auto!important;transition:none!important;animation:none!important;}
+}
