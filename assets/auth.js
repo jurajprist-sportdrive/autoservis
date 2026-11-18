@@ -36,10 +36,14 @@
     if(bar){const name=document.createElement('span');name.className='muted';name.textContent=user.display_name||user.username;bar.prepend(name);const logout=document.createElement('button');logout.className='btn outline small';logout.textContent='Odhlásiť';logout.onclick=()=>window.TomiAuth.logout();bar.append(logout);}
     const warning=document.createElement('div');warning.className='auth-warning';warning.textContent='TEST 43: Dashboard, plánovací kalendár, história práce a správa používateľov načítavajú údaje z MariaDB. Ostatné moduly ešte môžu používať lokálne údaje. Pred ostrou prevádzkou vykonajte testy.';
     document.querySelector('.workspace').prepend(warning);
-    if(!document.getElementById('tomi-modal66-css')){const link=document.createElement('link');link.id='tomi-modal66-css';link.rel='stylesheet';link.href='/assets/modal66.css?v=67';document.head.appendChild(link)}
-    if(!document.getElementById('tomi-design67-css')){const link=document.createElement('link');link.id='tomi-design67-css';link.rel='stylesheet';link.href='/assets/design67.css?v=67';document.head.appendChild(link)}
-    if(!document.getElementById('tomi-design68-css')){const link=document.createElement('link');link.id='tomi-design68-css';link.rel='stylesheet';link.href='/assets/design68.css?v=68';document.head.appendChild(link)}
-    if(!document.getElementById('tomi-design69-css')){const link=document.createElement('link');link.id='tomi-design69-css';link.rel='stylesheet';link.href='/assets/design69.css?v=69-1';document.head.appendChild(link)}
+    // TEST 70: do not stack TEST 66/67/68/69 style overrides. One design system only.
+    ['tomi-modal66-css','tomi-design67-css','tomi-design68-css','tomi-design69-css'].forEach(id=>document.getElementById(id)?.remove());
+    if(!document.getElementById('tomi-design70-css')){
+      const link=document.createElement('link');link.id='tomi-design70-css';link.rel='stylesheet';
+      link.href='/assets/design70.css?v=70-1';document.head.appendChild(link);
+    }
+    const design70=document.createElement('script');design70.src='/assets/design70.js?v=70-1';design70.async=false;
+    document.body.appendChild(design70);
     const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=64-2','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=68-1','/assets/cash58.js?v=67'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
