@@ -1,0 +1,28 @@
+/* AUTOSERVIS TOMI – TEST 66: shared modal visual system, no business logic changes */
+#modalroot .modalback{background:rgba(4,15,37,.78);backdrop-filter:blur(6px);padding:14px;z-index:1000}
+#modalroot .modal{background:linear-gradient(145deg,#102c54 0%,#091b36 100%);color:#f6f9ff;border:1px solid #45628b;border-radius:22px;box-shadow:0 30px 90px #020b1cbf, inset 0 1px #ffffff18;width:min(760px,100%);padding:25px;max-height:94dvh;overscroll-behavior:contain}
+#modalroot .modal>.row:first-child{border-bottom:1px solid #ffffff25;padding-bottom:13px;margin-bottom:18px;gap:14px}
+#modalroot .modal h2{color:#fff;font-size:clamp(20px,2.2vw,25px);line-height:1.2;margin:0;letter-spacing:-.025em}
+#modalroot .modal .close{background:#ffffff16;border:1px solid #ffffff35;color:#fff;border-radius:10px;width:36px;height:36px;flex-shrink:0;display:grid;place-items:center;font-size:23px}
+#modalroot .modal .field label,#modalroot .modal form label,#modalroot .modal .cash-form label{color:#d4e4fa;font-size:12px;font-weight:700}
+#modalroot .modal input:not([type=checkbox]):not([type=radio]):not([type=hidden]),#modalroot .modal select,#modalroot .modal textarea{background:#fff!important;color:#132a45!important;border:1px solid #cbd9e9!important;border-radius:10px!important;min-height:40px;padding:9px 11px;box-shadow:none!important;max-width:100%}
+#modalroot .modal input:focus-visible,#modalroot .modal select:focus-visible,#modalroot .modal textarea:focus-visible{outline:3px solid #70aaf6;outline-offset:1px}
+#modalroot .modal textarea{min-height:90px}
+#modalroot .modal .muted,#modalroot .modal .mini,#modalroot .modal .cash-subtitle{color:#b9cce5}
+#modalroot .modal .btn:not(.outline):not(.red),#modalroot .modal button[type=submit]:not(.cash-submit){background:#3678d7;color:white;border:1px solid #75a9ef;border-radius:10px;min-height:41px;font-weight:750}
+#modalroot .modal .btn.outline{background:#ffffff12;color:#eaf3ff;border:1px solid #9bb5d077}
+#modalroot .modal .btn.red{background:#b93749;color:#fff}
+#modalroot .modal .cash-form-v2{display:grid;grid-template-columns:minmax(0,1fr);gap:15px}
+#modalroot .modal .cash-form-v2 .cash-kind{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#modalroot .modal .cash-form-v2 .cash-kind button{border:1px solid #78b69a;background:#c9f0d8;color:#165b37;border-radius:12px;min-height:57px;padding:12px;font-size:16px;transition:background .12s,border-color .12s,box-shadow .12s}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal]{border-color:#e9a5aa;background:#ffe0e2;color:#872734}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit].selected{background:#10a55a;color:white;border-color:#8af5b7;box-shadow:0 0 0 3px #25d97844,0 5px 20px #0e9c5766}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal].selected{background:#dc344b;color:white;border-color:#ffa2ae;box-shadow:0 0 0 3px #ff566144,0 5px 20px #b71b3c66}
+#modalroot .modal .cash-form-v2 .cash-meta{display:grid;grid-template-columns:1.15fr 1.4fr .7fr;gap:10px;min-width:0}
+#modalroot .modal .cash-form-v2 .cash-meta label{min-width:0;display:grid;gap:5px;font-size:11px}
+#modalroot .modal .cash-form-v2 .cash-meta input,#modalroot .modal .cash-form-v2 .cash-meta select{font-size:13px;padding:8px 7px;min-width:0;width:100%}
+#modalroot .modal .cash-form-v2 .cash-amount input{font-size:25px;font-weight:800;min-height:55px}
+#modalroot .modal .cash-form-v2 .cash-submit{background:#3678d7;border:1px solid #86b9ff;color:#fff;border-radius:11px;padding:14px;font-size:15px;font-weight:800;min-height:49px}
+#modalroot .modal .cash-form-v2 .cash-submit:hover{background:#2467c7}
+#modalroot .modal .cash-form-v2 .cash-full{grid-column:1/-1}
+@media(max-width:600px){#modalroot .modal{padding:16px;border-radius:16px}#modalroot .modal .cash-form-v2 .cash-meta{grid-template-columns:1fr 1fr}#modalroot .modal .cash-form-v2 .cash-meta label:last-child{grid-column:1/-1}#modalroot .modal .grid.two{grid-template-columns:1fr}}
