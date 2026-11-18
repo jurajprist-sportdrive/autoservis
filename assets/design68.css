@@ -1,0 +1,41 @@
+/* TEST68 – cohesive visual language, UI-only; no data transformations */
+:root{--t68-navy:#142f4d;--t68-blue:#3269a4;--t68-red:#cc4655;--t68-ink:#20344b;--t68-muted:#718397;--t68-line:#dce5ee;--t68-bg:#edf2f7;--t68-white:#fff}
+body,.workspace{background:var(--t68-bg)!important;color:var(--t68-ink)!important;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif!important}
+.sidebar{background:linear-gradient(170deg,#152f4d,#0d243c)!important}
+.topbar{background:#fff!important;border-bottom:1px solid var(--t68-line)!important}
+#app{color:var(--t68-ink)}
+#app h1,#app h2,#app h3{color:#183654;letter-spacing:-.025em}
+#app .card,#app .panel,#app .stat,#app .tablewrap,#app .tomi-job-head,#app .tomi-documents-bar{border-radius:16px!important;border:1px solid var(--t68-line)!important;background:#fff;box-shadow:0 6px 22px rgba(16,43,74,.045)!important}
+#app .card{padding:clamp(14px,1.7vw,22px)}
+#app table{border-collapse:separate;border-spacing:0;width:100%}
+#app thead th{background:#f0f5fa!important;color:#60758b!important;text-transform:none;font-weight:700;font-size:12px;letter-spacing:.015em;border-bottom:1px solid var(--t68-line);padding:12px 13px}
+#app tbody td{border-bottom:1px solid #edf1f5;padding:11px 13px;vertical-align:middle}
+#app tbody tr:hover{background:#f7faff}
+#app .btn,#app button.btn,.workspace .btn{border-radius:10px!important;font-weight:650;transition:background .16s,box-shadow .16s,transform .16s}
+#app .btn:hover,.workspace .btn:hover{filter:brightness(1.045)}
+#app .btn:not(.outline):not(.red):not(.danger){background:#3269a4;border-color:#3269a4;color:#fff}
+#app .btn.red,#app .btn.danger{background:#cc4655;color:#fff}
+#app input:not([type=checkbox]):not([type=radio]):not([type=hidden]),#app select,#app textarea{border-radius:10px!important;border:1px solid #d4dfeb!important;background:#fff!important;color:#20344b!important;min-height:39px;max-width:100%;box-shadow:none!important}
+#app textarea{min-height:76px}
+#app input:focus-visible,#app select:focus-visible,#app textarea:focus-visible{outline:3px solid #5a9de744;outline-offset:1px;border-color:#5a91cc!important}
+#app label{font-size:12px;font-weight:650;color:#52677f}
+#modalroot .modalback{background:rgba(10,29,51,.53)!important;backdrop-filter:blur(4px)}
+#modalroot .modal{background:#f8fbff!important;color:#21364d!important;border:1px solid #d5e0ec!important;border-radius:19px!important;box-shadow:0 24px 80px #0b234557!important;padding:0!important;overflow:auto}
+#modalroot .modal>.row:first-child{background:linear-gradient(100deg,#1b4268,#244d75)!important;padding:17px 21px!important;border:0!important;margin:0 0 16px!important;border-radius:18px 18px 0 0}
+#modalroot .modal>.row:first-child h2{font-size:19px!important;color:#fff!important}
+#modalroot .modal>form,#modalroot .modal>.grid,#modalroot .modal>.card,#modalroot .modal>.row:not(:first-child),#modalroot .modal>div:not(:first-child){margin-left:20px;margin-right:20px;margin-bottom:20px}
+#modalroot .modal form label,#modalroot .modal .field label{color:#526a83!important;font-size:12px!important}
+#modalroot .modal .muted,#modalroot .modal .mini{color:#71869d!important}
+#modalroot .modal input:not([type=checkbox]):not([type=radio]),#modalroot .modal select,#modalroot .modal textarea{border:1px solid #d1dfed!important;background:white!important;color:#1b344e!important;min-height:39px!important}
+#modalroot .modal .btn.outline{color:#24527c!important;background:#eaf1f9!important;border-color:#c8d8e9!important}
+#modalroot .modal button[type=submit]:not(.cash-submit){background:#3269a4!important;border-color:#3269a4!important;color:white!important}
+#modalroot .modal .cash-kind button[data-kind=deposit].selected{background:#13a467!important;color:#fff!important}
+#modalroot .modal .cash-kind button[data-kind=withdrawal].selected{background:#cf4555!important;color:#fff!important}
+#app dialog,#app dialog[open],dialog.q68-dialog{background:#f9fbfe;color:#1e3650;border:1px solid #d9e5f0;border-radius:18px;box-shadow:0 24px 80px #0b234550;max-width:min(94vw,850px);padding:22px}
+#app dialog::backdrop,dialog.q68-dialog::backdrop{background:rgba(11,31,52,.56);backdrop-filter:blur(4px)}
+#app dialog h2,#app dialog h3{color:#173a5c}
+#app dialog .control,#app dialog input,#app dialog select,#app dialog textarea{background:#fff!important;color:#1b344e!important;border-radius:9px!important;border:1px solid #d3dfeb!important}
+#app dialog .btn{border-radius:10px!important}
+#q68-store-form{display:grid;gap:12px}#q68-store-form .q68-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#q68-store-form label{display:grid;gap:5px}#q68-store-form input,#q68-store-form textarea{width:100%;padding:9px}#q68-store-form footer{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}#q68-store-form .q68-primary{background:#3269a4;color:#fff;border:0;border-radius:10px;padding:11px 20px;font-weight:700}
+@media(max-width:700px){#q68-store-form .q68-two{grid-template-columns:1fr}#modalroot .modal{max-width:96vw!important}#modalroot .modal>form{margin-left:13px;margin-right:13px}#app .card{padding:13px}}
+@media(prefers-reduced-motion:reduce){#app *{transition:none!important}}

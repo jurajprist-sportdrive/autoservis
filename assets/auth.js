@@ -38,7 +38,8 @@
     document.querySelector('.workspace').prepend(warning);
     if(!document.getElementById('tomi-modal66-css')){const link=document.createElement('link');link.id='tomi-modal66-css';link.rel='stylesheet';link.href='/assets/modal66.css?v=67';document.head.appendChild(link)}
     if(!document.getElementById('tomi-design67-css')){const link=document.createElement('link');link.id='tomi-design67-css';link.rel='stylesheet';link.href='/assets/design67.css?v=67';document.head.appendChild(link)}
-    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=64-2','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=64-1','/assets/cash58.js?v=67'];
+    if(!document.getElementById('tomi-design68-css')){const link=document.createElement('link');link.id='tomi-design68-css';link.rel='stylesheet';link.href='/assets/design68.css?v=68';document.head.appendChild(link)}
+    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=64-2','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=68-1','/assets/cash58.js?v=67'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
   async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}
