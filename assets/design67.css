@@ -1,0 +1,43 @@
+/* AUTOSERVIS TOMI – TEST 67. Global visual layer; no changes to application logic. */
+:root{--t67-navy:#102b4c;--t67-deep:#0d223c;--t67-blue:#3174bf;--t67-border:#dce5ef;--t67-shadow:0 8px 28px rgba(18,43,76,.07)}
+body{background:#eef3f9!important;color:#192e48}
+.workspace{background:linear-gradient(160deg,#f3f7fc,#eaf0f8)!important;min-height:100vh}
+.topbar{background:#f9fbff!important;border-bottom:1px solid #dbe5f0!important;box-shadow:0 3px 16px rgba(19,42,74,.035)}
+.sidebar{background:linear-gradient(180deg,#102d50,#0c203a)!important;box-shadow:4px 0 22px rgba(7,29,54,.10)}
+.sidebar .navlink{border-radius:11px!important;transition:background .15s,transform .15s}
+.sidebar .navlink:hover{background:rgba(255,255,255,.12)!important;transform:translateX(2px)}
+.sidebar .navlink.active,.sidebar .navlink[aria-current=page]{background:rgba(112,171,243,.20)!important;box-shadow:inset 3px 0 #8ac3ff}
+#app h1,.workspace h1{letter-spacing:-.035em;color:#163555}
+#app .card,#app .panel,#app .stat,#app .tomi-job-head,#app .tomi-documents-bar{border-radius:17px!important;border-color:var(--t67-border)!important;box-shadow:var(--t67-shadow)}
+#app .btn:not(.red):not(.danger),.workspace .btn:not(.red):not(.danger){border-radius:10px;transition:transform .12s,filter .12s,box-shadow .12s}
+#app .btn:hover,.workspace .btn:hover{filter:brightness(1.035)}
+#app input:not([type=checkbox]):not([type=radio]),#app select,#app textarea{border-radius:10px;max-width:100%}
+#app input:focus-visible,#app select:focus-visible,#app textarea:focus-visible{outline:2px solid #80b3f1;outline-offset:1px}
+#app .tablewrap{border-radius:13px;overflow:auto;border:1px solid #e2eaf3}
+#app table thead{background:#eaf1f9}#app table tbody tr:hover{background:#f2f7fc}
+/* Modals: gentle blue instead of heavy dark. Existing modal structure is preserved. */
+#modalroot .modalback{background:rgba(12,31,55,.53)!important;backdrop-filter:blur(4px)}
+#modalroot .modal{background:linear-gradient(145deg,#1c4168,#153454)!important;border:1px solid #6482a0!important;border-radius:20px!important;box-shadow:0 24px 68px rgba(7,23,46,.35)!important;color:#f6faff!important}
+#modalroot .modal .close{background:rgba(255,255,255,.12)!important}
+#modalroot .modal input:not([type=checkbox]):not([type=radio]):not([type=hidden]),#modalroot .modal select,#modalroot .modal textarea{background:#fff!important;border-color:#dbe5f0!important;color:#1b3552!important;border-radius:10px!important}
+#modalroot .modal .cash-form-v2 .cash-kind button{min-height:49px!important;border-radius:11px!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit]:not(.selected){background:#e7f6ec!important;color:#28704b!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal]:not(.selected){background:#fbe9eb!important;color:#a14b53!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit].selected{background:#159a5a!important;box-shadow:0 0 0 2px #a3e8c6!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal].selected{background:#d74657!important;box-shadow:0 0 0 2px #f5afb9!important}
+/* Cash: balance + new movement close together, summary distributed to the right. */
+.cash-ui .cash-overview{grid-template-columns:max-content max-content minmax(0,1fr)!important;gap:clamp(12px,2vw,28px)!important;padding:19px 22px!important;border-radius:18px!important;box-shadow:var(--t67-shadow)!important}
+.cash-ui .cash-new{padding:13px 18px!important;white-space:nowrap;border-radius:11px!important}
+.cash-ui .cash-summary{min-width:0;display:flex;flex-direction:column;align-items:stretch;gap:11px;padding-left:clamp(12px,2vw,24px)!important}
+.cash-ui .cash-period-controls{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap}
+.cash-ui .cash-period-controls>span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:#71839b}
+.cash-ui .cash-period-buttons{display:flex;gap:4px;background:#edf3fa;border:1px solid #dbe6f3;padding:4px;border-radius:12px}
+.cash-ui .cash-period-btn{border:0;border-radius:8px;background:transparent;color:#55708e;padding:7px 11px;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap}
+.cash-ui .cash-period-btn.is-active{background:#285f9e;color:#fff;box-shadow:0 2px 7px #1b45632b}
+.cash-ui .cash-summary-lines{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px!important;margin-top:0!important}
+.cash-ui .cash-summary-lines>span{background:#f4f8fc;border:1px solid #e1eaf3;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:9px;min-width:0;font-size:12px}
+.cash-ui .cash-summary-lines b{font-size:clamp(12px,1.2vw,17px);white-space:nowrap}
+.cash-ui .cash-tablecard{border-radius:17px!important;box-shadow:var(--t67-shadow)!important}
+@media(max-width:1180px){.cash-ui .cash-overview{grid-template-columns:max-content 1fr!important}.cash-ui .cash-summary{grid-column:1/-1;border-left:0!important;border-top:1px solid #e1eaf3;padding:14px 0 0!important}}
+@media(max-width:620px){.cash-ui .cash-overview{grid-template-columns:1fr!important}.cash-ui .cash-new{width:100%}.cash-ui .cash-summary{grid-column:1}.cash-ui .cash-period-controls{justify-content:flex-start}.cash-ui .cash-period-buttons{width:100%;justify-content:space-between}.cash-ui .cash-period-btn{padding:8px 5px;font-size:11px;flex:1}.cash-ui .cash-summary-lines{grid-template-columns:1fr!important}.cash-ui .cash-summary-lines>span{padding:9px 12px}#modalroot .modal{padding:17px!important}}
+@media(prefers-reduced-motion:reduce){.sidebar .navlink,#app .btn,.workspace .btn{transition:none!important}}
