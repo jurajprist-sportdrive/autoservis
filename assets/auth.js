@@ -44,7 +44,7 @@
     }
     const design72=document.createElement('script');design72.src='/assets/design72.js?v=72-1';design72.async=false;
     document.body.appendChild(design72);
-    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=64-2','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=68-1','/assets/cash58.js?v=67'];
+    const scripts=['/assets/documents.js?v=1','/assets/extras.js?v=1','/assets/admin.js?v=20261117-47','/assets/server-customers.js?v=20261117-39','/assets/server-jobs.js?v=73-1','/assets/server-mechanic.js?v=20261118-62','/assets/server-attendance.js?v=20261117-09','/assets/server-inspection.js?v=20261117-11','/assets/server-yard-parts.js?v=36','/assets/workflow41.js?v=41-final','/assets/server43.js?v=49-1','/assets/quick46.js?v=68-1','/assets/cash58.js?v=67'];
     for(const src of scripts){const script=document.createElement('script');script.src=src;script.async=false;document.body.append(script);}
   }
   async function init(){if(token){try{const data=await request('me');if(data.user){start(data.user);return;}}catch{sessionStorage.removeItem('tomi_api_token');token='';}}showLogin();}

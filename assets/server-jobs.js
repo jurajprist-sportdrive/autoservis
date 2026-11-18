@@ -427,7 +427,24 @@ function itemForm(job,item,back){
 window.jobs=()=>'<div class="card">Načítavam zákazky z Websupportu…</div>';
 window.intake=()=>'<div class="card">Načítavam príjem vozidiel z Websupportu…</div>';
 window.quotes=()=>'<div class="card">Načítavam cenové ponuky z MariaDB…</div>';
-window.newJob=()=>edit();
+// TEST 73: dashboard may call newJob() before #jobs was ever opened.
+// Load server data on demand; never open a job editor against an empty cache.
+let newJobRequestPending=false;
+window.newJob=async()=>{
+ if(newJobRequestPending)return;
+ newJobRequestPending=true;
+ try{
+  if(!ready){
+   if(!busy)await load();
+   else {alert('Údaje sa ešte načítavajú. Skúste znovu po dokončení načítania.');return;}
+  }
+  if(!ready){
+   alert('Zákazku zatiaľ nie je možné vytvoriť – údaje z databázy sa nepodarilo načítať.'+(err?'\nChyba: '+err:''));
+   return;
+  }
+  edit();
+ }finally{newJobRequestPending=false;}
+};
 window.addEventListener('hashchange',()=>{if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0)});
 if(['#jobs','#intake'].includes(location.hash))setTimeout(load,0);
 })();
