@@ -1,0 +1,57 @@
+/* TEST69: consolidated ADMIN visual overrides. Pure CSS. No changes to API, workflows, mechanics or records. */
+:root{--blue:#255b91;--navy:#173854;--red:#c73d50;--bg:#eaf0f6;--line:#d9e3ed;--radius:14px;--tomi-font:Inter,'Segoe UI',Arial,sans-serif}
+body:has(.admin:not([hidden])),body:has(.admin:not([hidden])) button,body:has(.admin:not([hidden])) input,body:has(.admin:not([hidden])) select,body:has(.admin:not([hidden])) textarea{font-family:var(--tomi-font)!important}
+body:has(.admin:not([hidden])) :is(h1,h2,h3,h4,p,span,small,th,td,label,.metric,.cash-ui,.cash-ui *){font-family:var(--tomi-font)!important}
+.admin .sidebar{background:linear-gradient(180deg,#b63247 0%,#98283e 100%)!important;box-shadow:4px 0 22px #32101d22!important}
+.admin .sidebar :is(.brand,.side-group,.navlink,.navicon){color:#fff!important}
+.admin .sidebar .side-group{opacity:.75}
+.admin .sidebar .navlink{border-radius:11px!important;font-size:13px!important;font-weight:600!important}
+.admin .sidebar .navlink:hover{background:#ffffff22!important;transform:none!important}
+.admin .sidebar .navlink.active,.admin .sidebar .navlink[aria-current=page]{background:#ffffff2d!important;box-shadow:inset 3px 0 #fff!important}
+.admin .workspace{background:linear-gradient(145deg,#e8f0f8,#edf2f7)!important}
+.admin .topbar{background:#f9fbfe!important;border-bottom:1px solid #dce5ee!important}
+.admin .main{color:#1c344d;font-size:14px;line-height:1.48}
+.admin .main :is(h1,h2,h3,h4){font-family:var(--tomi-font)!important;letter-spacing:-.025em!important;font-weight:700!important;color:#183957!important}
+.admin .pagehead h1{font-size:27px!important;font-weight:750!important}
+.admin :is(.card,.panel,.tablewrap,.stat,.tomi-job-head,.tomi-documents-bar){border-radius:15px!important;border:1px solid #dce5ef!important;box-shadow:0 5px 22px #142e4910!important}
+.admin :is(.btn,button.btn,.tab){font-family:var(--tomi-font)!important;font-size:13px;font-weight:650!important;border-radius:10px!important;letter-spacing:0!important}
+.admin .btn:not(.red):not(.danger):not(.outline){background:#28649e!important;border-color:#28649e!important;color:white!important}
+.admin .btn.red,.admin .btn.danger{background:#c63e50!important;color:#fff!important}
+.admin .btn.outline{background:#f7fafd!important;color:#244b72!important;border:1px solid #cbdbe9!important}
+.admin :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea){font-family:var(--tomi-font)!important;font-size:13px!important;line-height:1.4!important;color:#1c3650!important;background:#fff!important;border:1px solid #cddbe9!important;border-radius:9px!important;box-shadow:none!important;max-width:100%}
+.admin :is(input,select,textarea):focus-visible{outline:3px solid #78a7d855!important;border-color:#548bc1!important}
+.admin :is(label,.field label,.sj-field){font-family:var(--tomi-font)!important;font-size:12px!important;font-weight:600!important;color:#4d637b!important}
+.admin :is(table,.cash-table){font-family:var(--tomi-font)!important;font-size:12px!important}
+.admin th{font-family:var(--tomi-font)!important;font-size:11px!important;font-weight:700!important;letter-spacing:0!important;background:#edf3f9!important;color:#627890!important}
+.admin td{font-family:var(--tomi-font)!important;font-size:12px!important}
+.admin .metric{font-size:27px!important;font-weight:750!important;letter-spacing:-.03em!important}
+/* Unified overlay / modal skins across app's distinct rendering mechanisms */
+body:has(.admin:not([hidden])) :is(.modalback,.sj-inspection-overlay,.wf41-overlay){background:rgba(13,31,52,.56)!important;backdrop-filter:blur(4px)}
+body:has(.admin:not([hidden])) :is(#modalroot .modal,.sj-inspection-dialog,.sj-dialog,.wf41-overlay .sj-inspection-dialog,dialog[open]){font-family:var(--tomi-font)!important;font-size:13px!important;line-height:1.45!important;background:#f8fbfe!important;color:#1c3650!important;border:1px solid #d7e2ee!important;border-radius:17px!important;box-shadow:0 26px 80px #102b4955!important}
+/* Modal headers: same navy, same typography, including quote and inspection dialogs */
+body:has(.admin:not([hidden])) :is(#modalroot .modal>.row:first-child,.sj-inspection-head,.sj-dialog-head){background:#1c4267!important;color:#fff!important;border-bottom:0!important;border-radius:15px 15px 0 0!important;padding:16px 20px!important}
+body:has(.admin:not([hidden])) :is(#modalroot .modal>.row:first-child h2,.sj-inspection-head h2,.sj-dialog-head h2){font-family:var(--tomi-font)!important;color:#fff!important;font-size:19px!important;font-weight:700!important;letter-spacing:-.02em!important;margin:0!important}
+body:has(.admin:not([hidden])) :is(.sj-inspection-head small,.sj-dialog-head small,.sj-kicker){color:#c9d9e9!important}
+body:has(.admin:not([hidden])) :is(.sj-inspection-dialog,.sj-dialog) :is(input:not([type=checkbox]):not([type=radio]),select,textarea){font-family:var(--tomi-font)!important;font-size:13px!important;border:1px solid #cddce9!important;border-radius:9px!important;background:white!important;color:#1c3650!important;box-shadow:none!important}
+body:has(.admin:not([hidden])) :is(.sj-inspection-dialog,.sj-dialog) :is(label,.sj-field,.sj-field span){font-family:var(--tomi-font)!important;font-size:12px!important;font-weight:600!important;color:#4d637b!important}
+body:has(.admin:not([hidden])) :is(.sj-inspection-dialog,.sj-dialog) :is(.btn,button[type=submit]){font-family:var(--tomi-font)!important;font-weight:650!important;border-radius:10px!important}
+body:has(.admin:not([hidden])) :is(.sj-close,#modalroot .modal .close){border:0!important;border-radius:9px!important;background:#ffffff26!important;color:#fff!important;width:35px;height:35px;display:grid;place-items:center}
+/* Existing common modal is light; earlier dark modal styles overridden. */
+#modalroot .modal{padding:0!important;overflow:auto!important}
+#modalroot .modal :is(form,.grid,.field,.stack){color:#1c3650!important}
+#modalroot .modal :is(.muted,.mini,.cash-subtitle){color:#71859a!important}
+#modalroot .modal :is(label,.field label,.cash-form label){color:#4d637b!important;font-weight:600!important}
+#modalroot .modal :is(input:not([type=checkbox]):not([type=radio]),select,textarea){background:#fff!important;color:#1c3650!important}
+#modalroot .modal>.row:first-child{margin:0 0 16px!important}
+#modalroot .modal>.row:first-child~*{margin-left:20px!important;margin-right:20px!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit]:not(.selected){background:#e6f4eb!important;color:#236f48!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal]:not(.selected){background:#fbe9ec!important;color:#a14253!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=deposit].selected{background:#15985d!important;color:white!important}
+#modalroot .modal .cash-form-v2 .cash-kind button[data-kind=withdrawal].selected{background:#cf3e52!important;color:white!important}
+#modalroot .modal .cash-form-v2 .cash-submit{background:#28649e!important;color:#fff!important;border:0!important}
+/* Consistent typography for cash widgets and quick-service forms */
+.cash-ui,.cash-ui *,.q46-page,.q46-page *{font-family:var(--tomi-font)!important}
+.cash-ui :is(.cash-summary-lines b,.cash-summary-lines strong,.cash-balance strong){font-weight:750!important;letter-spacing:-.02em!important}
+/* Preserve mechanic interface: selectors only affect visible admin and its known modal families */
+@media(max-width:720px){.admin .main{padding:15px!important}body:has(.admin:not([hidden])) :is(.sj-inspection-dialog,.sj-dialog){max-width:97vw!important}#modalroot .modal>.row:first-child~*{margin-left:13px!important;margin-right:13px!important}}
+@media(prefers-reduced-motion:reduce){.admin *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
